@@ -223,7 +223,7 @@ theorem succ_ascFactorial (n : ℕ) :
   | k + 1 => by rw [ascFactorial, Nat.mul_left_comm, succ_ascFactorial n k, ascFactorial, succ_add,
     ← Nat.add_assoc]
 
-/-- `(n + 1).ascFactorial k = (n + k) ! / n !` but without ℕ-division. See
+/-- `(n + 1).ascFactorial k = (n + k)! / (n)!` but without ℕ-division. See
 `Nat.ascFactorial_eq_div` for the version with ℕ-division. -/
 theorem factorial_mul_ascFactorial (n : ℕ) : ∀ k, (n)! * (n + 1).ascFactorial k = (n + k)!
   | 0 => by rw [ascFactorial_zero, Nat.add_zero, Nat.mul_one]
@@ -476,7 +476,7 @@ This is the highest factorial I can `#eval` using the naive implementation witho
 ```
 /-- info: 114716 -/
 #guard_msgs in
-#eval 9718 ! |>.log2
+#eval 9718! |>.log2
 ```
 
 Similarly, evaluation of `ascFactorial 100 15000` fails with the naive implementation
@@ -551,8 +551,8 @@ We are now limited by time, not stack space,
 and this is much faster than even the tail-recursive version.
 
 ```
-#time -- Less than 1s. (Tail-recursive version takes longer for `(10^5) !`.)
-#eval (10^6) ! |>.log2
+#time -- Less than 1s. (Tail-recursive version takes longer for `(10^5)!`.)
+#eval (10^6)! |>.log2
 ```
 -/
 
