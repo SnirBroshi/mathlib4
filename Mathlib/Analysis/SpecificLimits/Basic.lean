@@ -676,7 +676,7 @@ theorem factorial_tendsto_atTop : Tendsto Nat.factorial atTop atTop :=
   tendsto_atTop_atTop_of_monotone (fun _ _ ↦ Nat.factorial_le) fun n ↦ ⟨n, n.self_le_factorial⟩
 
 theorem tendsto_factorial_div_pow_self_atTop :
-    Tendsto (fun n ↦ n ! / (n : ℝ) ^ n : ℕ → ℝ) atTop (𝓝 0) :=
+    Tendsto (fun n ↦ (n)! / (n : ℝ) ^ n : ℕ → ℝ) atTop (𝓝 0) :=
   tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
     (tendsto_const_div_atTop_nhds_zero_nat 1)
     (Eventually.of_forall fun n ↦

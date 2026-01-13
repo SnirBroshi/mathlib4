@@ -274,10 +274,10 @@ theorem perm_of_mem_permutations {l₁ l₂ : List α} (h : l₁ ∈ permutation
     append_nil l₂ ▸ perm_of_mem_permutationsAux m
 
 theorem length_permutationsAux :
-    ∀ ts is : List α, length (permutationsAux ts is) + is.length ! = (length ts + length is)! := by
+    ∀ ts is : List α, length (permutationsAux ts is) + (is.length)! = (length ts + length is)! := by
   refine permutationsAux.rec (by simp) ?_
   intro t ts is IH1 IH2
-  have IH2 : length (permutationsAux is nil) + 1 = is.length ! := by simpa using IH2
+  have IH2 : length (permutationsAux is nil) + 1 = (is.length)! := by simpa using IH2
   simp only [length, factorial, Nat.mul_comm, add_eq] at IH1
   rw [permutationsAux_cons,
     length_foldr_permutationsAux2' _ _ _ _ _ fun l m => (perm_of_mem_permutations m).length_eq,

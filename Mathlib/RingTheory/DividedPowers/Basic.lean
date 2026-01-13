@@ -210,7 +210,7 @@ theorem dpow_smul_right {n : ℕ} (ha : a ∈ I) :
   rw [smul_eq_mul, hI.dpow_mul_right ha, smul_eq_mul]
 
 theorem factorial_mul_dpow_eq_pow {n : ℕ} (ha : a ∈ I) :
-    (n ! : A) * hI.dpow n a = a ^ n := by
+    ((n)! : A) * hI.dpow n a = a ^ n := by
   induction n with
   | zero => rw [factorial_zero, cast_one, one_mul, pow_zero, hI.dpow_zero ha]
   | succ n ih =>
@@ -229,7 +229,7 @@ by some nonzero integer `n`, then its `n`th power is zero.
 Proposition 1.2.7 of [Berthelot-1974], part (i). -/
 theorem nilpotent_of_mem_dpIdeal {n : ℕ} (hn : n ≠ 0) (hnI : ∀ {y}, y ∈ I → n • y = 0)
     (hI : DividedPowers I) (ha : a ∈ I) : a ^ n = 0 := by
-  have h_fac : (n ! : A) * hI.dpow n a = n • ((n - 1)! : A) * hI.dpow n a := by
+  have h_fac : ((n)! : A) * hI.dpow n a = n • ((n - 1)! : A) * hI.dpow n a := by
     rw [nsmul_eq_mul, ← cast_mul, mul_factorial_pred hn]
   rw [← hI.factorial_mul_dpow_eq_pow ha, h_fac, smul_mul_assoc]
   exact hnI (I.mul_mem_left ((n - 1)! : A) (hI.dpow_mem hn ha))

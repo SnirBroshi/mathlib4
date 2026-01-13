@@ -183,20 +183,20 @@ open Nat
 
 /-- Power series for the exponential function at zero. -/
 def exp : PowerSeries A :=
-  mk fun n => algebraMap ℚ A (1 / n !)
+  mk fun n => algebraMap ℚ A (1 / (n)!)
 
 /-- Power series for the sine function at zero. -/
 def sin : PowerSeries A :=
-  mk fun n => if Even n then 0 else algebraMap ℚ A ((-1) ^ (n / 2) / n !)
+  mk fun n => if Even n then 0 else algebraMap ℚ A ((-1) ^ (n / 2) / (n)!)
 
 /-- Power series for the cosine function at zero. -/
 def cos : PowerSeries A :=
-  mk fun n => if Even n then algebraMap ℚ A ((-1) ^ (n / 2) / n !) else 0
+  mk fun n => if Even n then algebraMap ℚ A ((-1) ^ (n / 2) / (n)!) else 0
 
 variable {A A'} (n : ℕ)
 
 @[simp]
-theorem coeff_exp : coeff n (exp A) = algebraMap ℚ A (1 / n !) :=
+theorem coeff_exp : coeff n (exp A) = algebraMap ℚ A (1 / (n)!) :=
   coeff_mk _ _
 
 @[simp]

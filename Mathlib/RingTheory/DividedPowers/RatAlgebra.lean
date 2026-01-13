@@ -59,11 +59,11 @@ namespace OfInvertibleFactorial
 variable {A : Type*} [CommSemiring A] (I : Ideal A) [DecidablePred (fun x ↦ x ∈ I)]
 
 /-- The family of functions `ℕ → A → A` given by `x^n/n!`. -/
-noncomputable def dpow : ℕ → A → A := fun m x => if x ∈ I then inverse (m ! : A) * x ^ m else 0
+noncomputable def dpow : ℕ → A → A := fun m x => if x ∈ I then inverse ((m)! : A) * x ^ m else 0
 
 variable {I}
 
-theorem dpow_eq_of_mem {m : ℕ} {x : A} (hx : x ∈ I) : dpow I m x = inverse (m ! : A) * x ^ m := by
+theorem dpow_eq_of_mem {m : ℕ} {x : A} (hx : x ∈ I) : dpow I m x = inverse ((m)! : A) * x ^ m := by
   simp [dpow, hx]
 
 theorem dpow_eq_of_not_mem {m : ℕ} {x : A} (hx : x ∉ I) : dpow I m x = 0 := by simp [dpow, hx]
@@ -131,7 +131,7 @@ theorem dpow_mul_of_add_lt {n : ℕ} (hn_fac : IsUnit ((n - 1)! : A)) {m k : ℕ
       inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hm),
       inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hk)]
   norm_cast; apply congr_arg
-  rw [← Nat.add_choose_mul_factorial_mul_factorial, mul_comm, mul_comm _ (m !), Nat.choose_symm_add]
+  rw [← Nat.add_choose_mul_factorial_mul_factorial, mul_comm, mul_comm _ (m)!, Nat.choose_symm_add]
 
 theorem mul_dpow {n : ℕ} (hn_fac : IsUnit ((n - 1).factorial : A)) (hnI : I ^ n = 0)
     {m k : ℕ} {x : A} (hx : x ∈ I) :
@@ -289,10 +289,10 @@ theorem dpow_eq_inv_fact_smul (hI : DividedPowers I) {n : ℕ} {x : R} (hx : x �
   rw [inverse_eq_inv', ← factorial_mul_dpow_eq_pow hI hx, ← smul_eq_mul, ← smul_assoc]
   nth_rewrite 1 [← one_smul R (hI.dpow n x)]
   congr
-  have aux : ((n !) : R) = (n ! : ℚ) • (1 : R) := by
+  have aux : (((n)!) : R) = ((n)! : ℚ) • (1 : R) := by
     rw [cast_smul_eq_nsmul, nsmul_eq_mul, mul_one]
   rw [aux, ← mul_smul]
-  suffices (n ! : ℚ)⁻¹ * (n !) = 1 by
+  suffices ((n)! : ℚ)⁻¹ * ((n)!) = 1 by
     rw [this, one_smul]
   apply Rat.inv_mul_cancel
   rw [← cast_zero, ne_eq]

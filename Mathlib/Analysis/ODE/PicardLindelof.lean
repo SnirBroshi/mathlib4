@@ -305,14 +305,14 @@ lemma dist_comp_iterate_next_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
     (hx : x ∈ closedBall x₀ r) (n : ℕ) (t : Icc tmin tmax)
     {α β : FunSpace t₀ x₀ r L}
     (h : dist ((next hf hx)^[n] α t) ((next hf hx)^[n] β t) ≤
-      (K * |t - t₀.1|) ^ n / n ! * dist α β) :
+      (K * |t - t₀.1|) ^ n / (n)! * dist α β) :
     dist (f t ((next hf hx)^[n] α t)) (f t ((next hf hx)^[n] β t)) ≤
-      K ^ (n + 1) * |t - t₀.1| ^ n / n ! * dist α β :=
+      K ^ (n + 1) * |t - t₀.1| ^ n / (n)! * dist α β :=
   calc
     _ ≤ K * dist ((next hf hx)^[n] α t) ((next hf hx)^[n] β t) :=
       hf.lipschitzOnWith t.1 t.2 |>.dist_le_mul
         _ (FunSpace.mem_closedBall hf.mul_max_le) _ (FunSpace.mem_closedBall hf.mul_max_le)
-    _ ≤ K ^ (n + 1) * |t - t₀.1| ^ n / n ! * dist α β := by
+    _ ≤ K ^ (n + 1) * |t - t₀.1| ^ n / (n)! * dist α β := by
       rw [pow_succ', mul_assoc, mul_div_assoc, mul_assoc]
       gcongr
       rwa [← mul_pow]
@@ -321,7 +321,7 @@ lemma dist_comp_iterate_next_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
 lemma dist_iterate_next_apply_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
     (hx : x ∈ closedBall x₀ r) (α β : FunSpace t₀ x₀ r L) (n : ℕ) (t : Icc tmin tmax) :
     dist ((next hf hx)^[n] α t) ((next hf hx)^[n] β t) ≤
-      (K * |t.1 - t₀.1|) ^ n / n ! * dist α β := by
+      (K * |t.1 - t₀.1|) ^ n / (n)! * dist α β := by
   induction n generalizing t with
   | zero => simpa using
       ContinuousMap.dist_apply_le_dist (f := toContinuousMap α) (g := toContinuousMap β) _
@@ -331,7 +331,7 @@ lemma dist_iterate_next_apply_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
       ← intervalIntegral.integral_sub (intervalIntegrable_comp_compProj hf _ t)
         (intervalIntegrable_comp_compProj hf _ t)]
     calc
-      _ ≤ ∫ τ in uIoc t₀.1 t.1, K ^ (n + 1) * |τ - t₀| ^ n / n ! * dist α β := by
+      _ ≤ ∫ τ in uIoc t₀.1 t.1, K ^ (n + 1) * |τ - t₀| ^ n / (n)! * dist α β := by
         rw [intervalIntegral.norm_intervalIntegral_eq]
         apply MeasureTheory.norm_integral_le_of_norm_le (Continuous.integrableOn_uIoc (by fun_prop))
         apply ae_restrict_mem measurableSet_Ioc |>.mono
@@ -341,7 +341,7 @@ lemma dist_iterate_next_apply_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
           subset_trans uIoc_subset_uIcc (uIcc_subset_Icc t₀.2 t.2) ht'
         rw [← dist_eq_norm, compProj_of_mem, compProj_of_mem]
         exact dist_comp_iterate_next_le hf hx _ ⟨t', ht'⟩ (hn _)
-      _ ≤ (K * |t.1 - t₀.1|) ^ (n + 1) / (n + 1) ! * dist α β := by
+      _ ≤ (K * |t.1 - t₀.1|) ^ (n + 1) / (n + 1)! * dist α β := by
         apply le_of_abs_le
         -- critical: `integral_pow_abs_sub_uIoc`
         rw [← intervalIntegral.abs_intervalIntegral_eq, intervalIntegral.integral_mul_const,
@@ -355,7 +355,7 @@ $(K \max(t_{\mathrm{max}}, t_{\mathrm{min}})^n / n!$. -/
 lemma dist_iterate_next_iterate_next_le (hf : IsPicardLindelof f t₀ x₀ a r L K)
     (hx : x ∈ closedBall x₀ r) (α β : FunSpace t₀ x₀ r L) (n : ℕ) :
     dist ((next hf hx)^[n] α) ((next hf hx)^[n] β) ≤
-      (K * max (tmax - t₀) (t₀ - tmin)) ^ n / n ! * dist α β := by
+      (K * max (tmax - t₀) (t₀ - tmin)) ^ n / (n)! * dist α β := by
   rw [← MetricSpace.isometry_induced FunSpace.toContinuousMap FunSpace.toContinuousMap.injective
     |>.dist_eq, ContinuousMap.dist_le]
   · intro t
@@ -372,7 +372,7 @@ lemma exists_contractingWith_iterate_next (hf : IsPicardLindelof f t₀ x₀ a r
       ContractingWith C (next hf hx)^[n] := by
   obtain ⟨n, hn⟩ := FloorSemiring.tendsto_pow_div_factorial_atTop (K * max (tmax - t₀) (t₀ - tmin))
     |>.eventually (gt_mem_nhds zero_lt_one) |>.exists
-  have : (0 : ℝ) ≤ (K * max (tmax - t₀) (t₀ - tmin)) ^ n / n ! := by
+  have : (0 : ℝ) ≤ (K * max (tmax - t₀) (t₀ - tmin)) ^ n / (n)! := by
     have : 0 ≤ max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left <| sub_nonneg_of_le t₀.2.2
     positivity
   refine ⟨n, ⟨_, this⟩, fun x hx ↦ ?_⟩
@@ -406,7 +406,7 @@ lemma dist_next_next (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x ∈ clo
 lemma dist_iterate_next_le (hf : IsPicardLindelof f t₀ x₀ a r L K) (hx : x ∈ closedBall x₀ r)
     (α : FunSpace t₀ x₀ r L) (n : ℕ) :
     dist α ((next hf hx)^[n] α) ≤
-      (∑ i ∈ Finset.range n, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / i !)
+      (∑ i ∈ Finset.range n, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / (i)!)
         * dist α (next hf hx α) := by
   nth_rw 1 [← iterate_zero_apply (next hf hx) α]
   rw [Finset.sum_mul]
@@ -419,7 +419,7 @@ lemma dist_iterate_iterate_next_le_of_lipschitzWith (hf : IsPicardLindelof f t�
     (hx : x ∈ closedBall x₀ r) (α : FunSpace t₀ x₀ r L) {m : ℕ} {C : ℝ≥0}
     (hm : LipschitzWith C (next hf hx)^[m]) (n : ℕ) :
     dist α ((next hf hx)^[m]^[n] α) ≤
-      (∑ i ∈ Finset.range m, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / i !) *
+      (∑ i ∈ Finset.range m, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / (i)!) *
         (∑ i ∈ Finset.range n, (C : ℝ) ^ i) * dist α (next hf hx α) := by
   nth_rw 1 [← iterate_zero_apply (next hf hx) α]
   rw [Finset.mul_sum, Finset.sum_mul]
@@ -441,7 +441,7 @@ lemma exists_forall_closedBall_funSpace_dist_le_mul [CompleteSpace E]
       (α β : FunSpace t₀ x₀ r L) (_ : IsFixedPt (next hf hx) α) (_ : IsFixedPt (next hf hy) β),
       dist α β ≤ L' * dist x y := by
   obtain ⟨m, C, h⟩ := exists_contractingWith_iterate_next hf
-  let L' := (∑ i ∈ Finset.range m, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / i !) * (1 - C)⁻¹
+  let L' := (∑ i ∈ Finset.range m, (K * max (tmax - t₀) (t₀ - tmin)) ^ i / (i)!) * (1 - C)⁻¹
   have hL' : 0 ≤ L' := by
     have : 0 ≤ max (tmax - t₀) (t₀ - tmin) := le_max_of_le_left <| sub_nonneg_of_le t₀.2.2
     positivity

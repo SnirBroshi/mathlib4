@@ -211,11 +211,11 @@ variable (S : Type*) [Semiring S] (r n : ℕ)
 
 @[simp]
 theorem ascPochhammer_eval_one (S : Type*) [Semiring S] (n : ℕ) :
-    (ascPochhammer S n).eval (1 : S) = (n ! : S) := by
+    (ascPochhammer S n).eval (1 : S) = ((n)! : S) := by
   rw_mod_cast [ascPochhammer_nat_eq_ascFactorial, Nat.one_ascFactorial]
 
 theorem factorial_mul_ascPochhammer (S : Type*) [Semiring S] (r n : ℕ) :
-    (r ! : S) * (ascPochhammer S n).eval (r + 1 : S) = (r + n)! := by
+    ((r)! : S) * (ascPochhammer S n).eval (r + 1 : S) = (r + n)! := by
   rw_mod_cast [ascPochhammer_nat_eq_ascFactorial, Nat.factorial_mul_ascFactorial]
 
 theorem ascPochhammer_nat_eval_succ (r : ℕ) :
@@ -249,7 +249,7 @@ theorem cast_descFactorial :
       rw [tsub_eq_zero_iff_le.mpr h, zero_add]
     · rw [tsub_add_cancel_of_le h]
 
-theorem cast_factorial : (a ! : S) = (ascPochhammer S a).eval 1 := by
+theorem cast_factorial : ((a)! : S) = (ascPochhammer S a).eval 1 := by
   rw [← one_ascFactorial, cast_ascFactorial, cast_one]
 
 end Nat
@@ -518,8 +518,8 @@ section DivisionSemiring
 variable [DivisionSemiring K] [CharZero K]
 
 theorem cast_choose_eq_ascPochhammer_div (a b : ℕ) :
-    (a.choose b : K) = (ascPochhammer K b).eval ↑(a - (b - 1)) / b ! := by
-  rw [eq_div_iff_mul_eq (cast_ne_zero.2 b.factorial_ne_zero : (b ! : K) ≠ 0), ← cast_mul,
+    (a.choose b : K) = (ascPochhammer K b).eval ↑(a - (b - 1)) / (b)! := by
+  rw [eq_div_iff_mul_eq (cast_ne_zero.2 b.factorial_ne_zero : ((b)! : K) ≠ 0), ← cast_mul,
     mul_comm, ← descFactorial_eq_factorial_mul_choose, ← cast_descFactorial]
 
 end DivisionSemiring
@@ -528,8 +528,8 @@ section DivisionRing
 variable [DivisionRing K] [CharZero K]
 
 theorem cast_choose_eq_descPochhammer_div (a b : ℕ) :
-    (a.choose b : K) = (descPochhammer K b).eval ↑a / b ! := by
-  rw [eq_div_iff_mul_eq (cast_ne_zero.2 b.factorial_ne_zero : (b ! : K) ≠ 0), ← cast_mul,
+    (a.choose b : K) = (descPochhammer K b).eval ↑a / (b)! := by
+  rw [eq_div_iff_mul_eq (cast_ne_zero.2 b.factorial_ne_zero : ((b)! : K) ≠ 0), ← cast_mul,
     mul_comm, ← descFactorial_eq_factorial_mul_choose, descPochhammer_eval_eq_descFactorial]
 
 end DivisionRing

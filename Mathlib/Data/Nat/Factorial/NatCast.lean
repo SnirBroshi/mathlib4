@@ -27,8 +27,8 @@ section Semiring
 
 variable {A : Type*} [Semiring A]
 
-theorem natCast_factorial_of_le {n : ℕ} (hn_fac : IsUnit (n ! : A))
-    {m : ℕ} (hmn : m ≤ n) : IsUnit (m ! : A) := by
+theorem natCast_factorial_of_le {n : ℕ} (hn_fac : IsUnit ((n)! : A))
+    {m : ℕ} (hmn : m ≤ n) : IsUnit ((m)! : A) := by
   obtain ⟨k, rfl⟩ := exists_add_of_le hmn
   clear hmn
   induction k generalizing m with
@@ -40,13 +40,13 @@ theorem natCast_factorial_of_le {n : ℕ} (hn_fac : IsUnit (n ! : A))
     exact this.2
 
 theorem natCast_factorial_of_lt {n : ℕ} (hn_fac : IsUnit ((n - 1)! : A))
-    {m : ℕ} (hmn : m < n) : IsUnit (m ! : A) :=
+    {m : ℕ} (hmn : m < n) : IsUnit ((m)! : A) :=
   hn_fac.natCast_factorial_of_le <| le_sub_one_of_lt hmn
 
 /-- If `A` is an algebra over a characteristic-zero (semi)field, then `n!` is a unit. -/
 theorem natCast_factorial_of_algebra (K : Type*) [Semifield K] [CharZero K] [Algebra K A] (n : ℕ) :
-    IsUnit (n ! : A) := by
-  suffices IsUnit (n ! : K) by
+    IsUnit ((n)! : A) := by
+  suffices IsUnit ((n)! : K) by
     simpa using this.map (algebraMap K A)
   simp [isUnit_iff_ne_zero, n.factorial_ne_zero]
 
@@ -56,7 +56,7 @@ section CharP
 
 variable {A : Type*} [Ring A] (p : ℕ) [Fact (Nat.Prime p)] [CharP A p]
 
-theorem natCast_factorial_iff_of_charP {n : ℕ} : IsUnit (n ! : A) ↔ n < p := by
+theorem natCast_factorial_iff_of_charP {n : ℕ} : IsUnit ((n)! : A) ↔ n < p := by
   have hp : p.Prime := Fact.out
   induction n with
   | zero => simp [hp.pos]
@@ -86,7 +86,7 @@ lemma natCast_of_isNilpotent_of_coprime (h : p.Coprime n) :
   rw [← Nat.cast_one, ← Int.cast_natCast 1, ← (h.pow_left m).gcd_eq_one, Nat.gcd_eq_gcd_ab]
 
 theorem natCast_factorial_of_isNilpotent [Fact p.Prime] (h : n < p) :
-    IsUnit (n ! : A) := by
+    IsUnit ((n)! : A) := by
   induction n with
   | zero => simp
   | succ n ih =>
@@ -102,8 +102,8 @@ end IsUnit
 open Nat Ring
 
 lemma Nat.castChoose_eq {A : Type*} [CommSemiring A] {m : ℕ} {k : ℕ × ℕ}
-    (hm : IsUnit (m ! : A)) (hk : k ∈ Finset.antidiagonal m) :
-    (choose m k.1 : A) = ↑m ! * inverse ↑k.1! * inverse ↑k.2! := by
+    (hm : IsUnit ((m)! : A)) (hk : k ∈ Finset.antidiagonal m) :
+    (choose m k.1 : A) = ↑(m)! * inverse ↑(k.1)! * inverse ↑(k.2)! := by
   rw [Finset.mem_antidiagonal] at hk
   subst hk
   rw [eq_mul_inverse_iff_mul_eq, eq_mul_inverse_iff_mul_eq, ← Nat.cast_mul, ← Nat.cast_mul,

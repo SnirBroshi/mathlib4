@@ -84,7 +84,7 @@ variable (p : ℕ) [hp : Fact p.Prime]
 
 set_option backward.privateInPublic true in
 /-- The family `ℕ → ℚ_[p] → ℚ_[p]` given by `dpow n x = x ^ n / n!`. -/
-private noncomputable def dpow' : ℕ → ℚ_[p] → ℚ_[p] := fun m x => inverse (m ! : ℚ_[p]) * x ^ m
+private noncomputable def dpow' : ℕ → ℚ_[p] → ℚ_[p] := fun m x => inverse ((m)! : ℚ_[p]) * x ^ m
 
 private lemma dpow'_norm_le_of_ne_zero {n : ℕ} (hn : n ≠ 0) {x : ℤ_[p]}
     (hx : x ∈ Ideal.span {(p : ℤ_[p])}) : ‖dpow' p n x‖ ≤ (p : ℝ)⁻¹ := by
@@ -95,7 +95,7 @@ private lemma dpow'_norm_le_of_ne_zero {n : ℕ} (hn : n ≠ 0) {x : ℤ_[p]}
       norm_zero, inv_nonneg, cast_nonneg]
   · have hlt : (padicValNat p n.factorial : ℤ) < n := by
       exact_mod_cast padicValNat_factorial_lt_of_ne_zero p hn
-    have hnorm : 0 < ‖(n ! : ℚ_[p])‖ := by
+    have hnorm : 0 < ‖((n)! : ℚ_[p])‖ := by
       simp only [norm_pos_iff, ne_eq, cast_eq_zero]
       exact factorial_ne_zero n
     rw [← zpow_neg_one, ← Nat.cast_one (R := ℤ), Padic.norm_le_pow_iff_norm_lt_pow_add_one]
@@ -160,7 +160,7 @@ private lemma dividedPowers_eq (n : ℕ) (x : ℤ_[p]) :
   · have hinj : Injective (PadicInt.Coe.ringHom (p := p)) :=
       (Set.injective_codRestrict Subtype.property).mp fun ⦃a₁ a₂⦄ a ↦ a
     have heq : Coe.ringHom ⟨dpow' p n x, dpow'_int p n hx⟩ =
-        inverse (n ! : ℚ_[p]) * Coe.ringHom x ^ n := by
+        inverse ((n)! : ℚ_[p]) * Coe.ringHom x ^ n := by
       simp [dpow', inverse_eq_inv', Coe.ringHom_apply]
     simpa only [← hinj.eq_iff, (Exists.choose_spec (_ : ∃ a, ∃ _, Coe.ringHom a = _)).2,
       RatAlgebra.dpow_apply, Submodule.mem_top] using heq.symm
@@ -168,7 +168,7 @@ private lemma dividedPowers_eq (n : ℕ) (x : ℤ_[p]) :
 
 lemma coe_dpow_eq (n : ℕ) (x : ℤ_[p]) :
     ((dividedPowers p).dpow n x : ℚ_[p]) = open Classical in
-      if _ : x ∈ Ideal.span {(p : ℤ_[p])} then inverse (n ! : ℚ_[p]) * x ^ n else 0 := by
+      if _ : x ∈ Ideal.span {(p : ℤ_[p])} then inverse ((n)! : ℚ_[p]) * x ^ n else 0 := by
   simp only [dividedPowers_eq, dpow', inverse_eq_inv', dite_eq_ite]
   split_ifs <;> simp
 

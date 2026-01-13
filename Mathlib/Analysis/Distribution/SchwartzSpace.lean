@@ -844,7 +844,7 @@ def compCLM {g : D → E} (hg : g.HasTemperateGrowth)
     rw [norm_zero] at hg_upper'
     exact nonneg_of_mul_nonneg_left hg_upper' (by positivity)
   let k' := kg * (k + l * n)
-  use Finset.Iic (k', n), (1 + Cg) ^ (k + l * n) * ((C + 1) ^ n * n ! * 2 ^ k'), by positivity
+  use Finset.Iic (k', n), (1 + Cg) ^ (k + l * n) * ((C + 1) ^ n * (n)! * 2 ^ k'), by positivity
   intro f x
   let seminorm_f := ((Finset.Iic (k', n)).sup (schwartzSeminormFamily 𝕜 _ _)) f
   have hg_upper'' : (1 + ‖x‖) ^ (k + l * n) ≤ (1 + Cg) ^ (k + l * n) * (1 + ‖g x‖) ^ k' := by
@@ -877,9 +877,9 @@ def compCLM {g : D → E} (hg : g.HasTemperateGrowth)
   grw [hxk, this]
   have rearrange :
     (1 + ‖x‖) ^ k *
-        (n ! * (2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k') * ((C + 1) * (1 + ‖x‖) ^ l) ^ n) =
+        ((n)! * (2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k') * ((C + 1) * (1 + ‖x‖) ^ l) ^ n) =
       (1 + ‖x‖) ^ (k + l * n) / (1 + ‖g x‖) ^ k' *
-        ((C + 1) ^ n * n ! * 2 ^ k' * seminorm_f) := by
+        ((C + 1) ^ n * (n)! * 2 ^ k' * seminorm_f) := by
     rw [mul_pow, pow_add, ← pow_mul]
     ring
   rw [rearrange]

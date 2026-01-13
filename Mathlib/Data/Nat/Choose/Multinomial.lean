@@ -127,12 +127,12 @@ theorem succ_mul_binomial [DecidableEq α] (h : a ≠ b) :
 
 
 theorem multinomial_univ_two (a b : ℕ) :
-    multinomial Finset.univ ![a, b] = (a + b)! / (a ! * b !) := by
+    multinomial Finset.univ ![a, b] = (a + b)! / ((a)! * (b)!) := by
   rw [multinomial, Fin.sum_univ_two, Fin.prod_univ_two]
   dsimp only [Matrix.cons_val]
 
 theorem multinomial_univ_three (a b c : ℕ) :
-    multinomial Finset.univ ![a, b, c] = (a + b + c)! / (a ! * b ! * c !) := by
+    multinomial Finset.univ ![a, b, c] = (a + b + c)! / ((a)! * (b)! * (c)!) := by
   rw [multinomial, Fin.sum_univ_three, Fin.prod_univ_three]
   rfl
 
@@ -149,7 +149,7 @@ variable {α : Type*}
   for the big operations
 -/
 def multinomial (f : α →₀ ℕ) : ℕ :=
-  (f.sum fun _ => id)! / f.prod fun _ n => n !
+  (f.sum fun _ => id)! / f.prod fun _ n => (n)!
 
 theorem multinomial_eq (f : α →₀ ℕ) : f.multinomial = Nat.multinomial f.support f :=
   rfl

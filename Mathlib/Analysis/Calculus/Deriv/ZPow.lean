@@ -126,23 +126,23 @@ theorem iter_deriv_pow' (n k : ℕ) :
   funext fun x => iter_deriv_pow n x k
 
 theorem iter_deriv_inv (k : ℕ) (x : 𝕜) :
-    deriv^[k] Inv.inv x = (-1) ^ k * k ! * x ^ (-1 - k : ℤ) := calc
+    deriv^[k] Inv.inv x = (-1) ^ k * (k)! * x ^ (-1 - k : ℤ) := calc
   deriv^[k] Inv.inv x = deriv^[k] (· ^ (-1 : ℤ)) x := by simp
   _ = (∏ i ∈ Finset.range k, (-1 - i : 𝕜)) * x ^ (-1 - k : ℤ) := mod_cast iter_deriv_zpow (-1) x k
-  _ = (-1) ^ k * k ! * x ^ (-1 - k : ℤ) := by
+  _ = (-1) ^ k * (k)! * x ^ (-1 - k : ℤ) := by
     simp only [← neg_add', Finset.prod_neg, ← Finset.prod_Ico_id_eq_factorial,
       Finset.prod_Ico_eq_prod_range]
     simp
 
 @[simp]
 theorem iter_deriv_inv' (k : ℕ) :
-    deriv^[k] Inv.inv = fun x : 𝕜 => (-1) ^ k * k ! * x ^ (-1 - k : ℤ) :=
+    deriv^[k] Inv.inv = fun x : 𝕜 => (-1) ^ k * (k)! * x ^ (-1 - k : ℤ) :=
   funext (iter_deriv_inv k)
 
 open Nat Function in
 theorem iter_deriv_inv_linear (k : ℕ) (c d : 𝕜) :
     deriv^[k] (fun x ↦ (c * x + d)⁻¹) =
-    (fun x : 𝕜 ↦ (-1) ^ k * k ! * c ^ k * (c * x + d) ^ (-1 - k : ℤ)) := by
+    (fun x : 𝕜 ↦ (-1) ^ k * (k)! * c ^ k * (c * x + d) ^ (-1 - k : ℤ)) := by
   induction k with
   | zero => simp
   | succ k ihk =>
@@ -163,7 +163,7 @@ theorem iter_deriv_inv_linear (k : ℕ) (c d : 𝕜) :
 
 theorem iter_deriv_inv_linear_sub (k : ℕ) (c d : 𝕜) :
     deriv^[k] (fun x ↦ (c * x - d)⁻¹) =
-    (fun x : 𝕜 ↦ (-1) ^ k * k ! * c ^ k * (c * x - d) ^ (-1 - k : ℤ)) := by
+    (fun x : 𝕜 ↦ (-1) ^ k * (k)! * c ^ k * (c * x - d) ^ (-1 - k : ℤ)) := by
   simpa [sub_eq_add_neg] using iter_deriv_inv_linear k c (-d)
 
 variable {f : E → 𝕜} {t : Set E} {a : E}

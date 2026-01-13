@@ -55,10 +55,10 @@ theorem descFactorial_eq_prod_range (n : ℕ) : ∀ k, n.descFactorial k = ∏ i
   | k + 1 => by rw [descFactorial, prod_range_succ_comm, descFactorial_eq_prod_range n k]
 
 /-- `k!` divides the product of any `k` consecutive integers. -/
-lemma factorial_coe_dvd_prod (k : ℕ) (n : ℤ) : (k ! : ℤ) ∣ ∏ i ∈ range k, (n + i) := by
+lemma factorial_coe_dvd_prod (k : ℕ) (n : ℤ) : ((k)! : ℤ) ∣ ∏ i ∈ range k, (n + i) := by
   rw [Int.dvd_iff_emod_eq_zero, Finset.prod_int_mod]
   simp_rw [← Int.emod_add_emod n]
-  have hn : 0 ≤ n % k ! := Int.emod_nonneg n <| Int.natCast_ne_zero.mpr k.factorial_ne_zero
+  have hn : 0 ≤ n % (k)! := Int.emod_nonneg n <| Int.natCast_ne_zero.mpr k.factorial_ne_zero
   obtain ⟨x, hx⟩ := Int.eq_ofNat_of_zero_le hn
   have hdivk := x.factorial_dvd_ascFactorial k
   zify [x.ascFactorial_eq_prod_range k] at hdivk

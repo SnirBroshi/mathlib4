@@ -247,7 +247,7 @@ theorem bernoulliFourierCoeff_zero {k : ℕ} (hk : k ≠ 0) : bernoulliFourierCo
     ofReal_zero]
 
 theorem bernoulliFourierCoeff_eq {k : ℕ} (hk : k ≠ 0) (n : ℤ) :
-    bernoulliFourierCoeff k n = -k ! / (2 * π * I * n) ^ k := by
+    bernoulliFourierCoeff k n = -(k)! / (2 * π * I * n) ^ k := by
   rcases eq_or_ne n 0 with (rfl | hn)
   · rw [bernoulliFourierCoeff_zero hk, Int.cast_zero, mul_zero, zero_pow hk,
       div_zero]
@@ -279,16 +279,16 @@ theorem periodizedBernoulli.continuous {k : ℕ} (hk : k ≠ 1) : Continuous (pe
     (Polynomial.continuous _).continuousOn
 
 theorem fourierCoeff_bernoulli_eq {k : ℕ} (hk : k ≠ 0) (n : ℤ) :
-    fourierCoeff ((↑) ∘ periodizedBernoulli k : 𝕌 → ℂ) n = -k ! / (2 * π * I * n) ^ k := by
+    fourierCoeff ((↑) ∘ periodizedBernoulli k : 𝕌 → ℂ) n = -(k)! / (2 * π * I * n) ^ k := by
   have : ((↑) ∘ periodizedBernoulli k : 𝕌 → ℂ) = AddCircle.liftIco 1 0 ((↑) ∘ bernoulliFun k) := by
     ext1 x; rfl
   rw [this, fourierCoeff_liftIco_eq]
   simpa only [zero_add] using bernoulliFourierCoeff_eq hk n
 
 theorem summable_bernoulli_fourier {k : ℕ} (hk : 2 ≤ k) :
-    Summable (fun n => -k ! / (2 * π * I * n) ^ k : ℤ → ℂ) := by
+    Summable (fun n => -(k)! / (2 * π * I * n) ^ k : ℤ → ℂ) := by
   have :
-      ∀ n : ℤ, -(k ! : ℂ) / (2 * π * I * n) ^ k = -k ! / (2 * π * I) ^ k * (1 / (n : ℂ) ^ k) := by
+      ∀ n : ℤ, -((k)! : ℂ) / (2 * π * I * n) ^ k = -(k)! / (2 * π * I) ^ k * (1 / (n : ℂ) ^ k) := by
     intro n; rw [mul_one_div, div_div, ← mul_pow]
   simp_rw [this]
   refine Summable.mul_left _ <| .of_norm ?_
@@ -301,11 +301,11 @@ theorem summable_bernoulli_fourier {k : ℕ} (hk : 2 ≤ k) :
 theorem hasSum_one_div_pow_mul_fourier_mul_bernoulliFun {k : ℕ} (hk : 2 ≤ k) {x : ℝ}
     (hx : x ∈ Icc (0 : ℝ) 1) :
     HasSum (fun n : ℤ => 1 / (n : ℂ) ^ k * fourier n (x : 𝕌))
-      (-(2 * π * I) ^ k / k ! * bernoulliFun k x) := by
+      (-(2 * π * I) ^ k / (k)! * bernoulliFun k x) := by
   -- first show it suffices to prove result for `Ico 0 1`
   suffices ∀ {y : ℝ}, y ∈ Ico (0 : ℝ) 1 →
       HasSum (fun (n : ℤ) ↦ 1 / (n : ℂ) ^ k * fourier n y)
-        (-(2 * (π : ℂ) * I) ^ k / k ! * bernoulliFun k y) by
+        (-(2 * (π : ℂ) * I) ^ k / (k)! * bernoulliFun k y) by
     rw [← Ico_insert_right (zero_le_one' ℝ), mem_insert_iff, or_comm] at hx
     rcases hx with (hx | rfl)
     · exact this hx
@@ -316,13 +316,13 @@ theorem hasSum_one_div_pow_mul_fourier_mul_bernoulliFun {k : ℕ} (hk : 2 ≤ k)
   let B : C(𝕌, ℂ) :=
     ContinuousMap.mk ((↑) ∘ periodizedBernoulli k)
       (continuous_ofReal.comp (periodizedBernoulli.continuous (by lia)))
-  have step1 : ∀ n : ℤ, fourierCoeff B n = -k ! / (2 * π * I * n) ^ k := by
+  have step1 : ∀ n : ℤ, fourierCoeff B n = -(k)! / (2 * π * I * n) ^ k := by
     rw [ContinuousMap.coe_mk]; exact fourierCoeff_bernoulli_eq (by lia : k ≠ 0)
   have step2 :=
     has_pointwise_sum_fourier_series_of_summable
       ((summable_bernoulli_fourier hk).congr fun n => (step1 n).symm) y
   simp_rw [step1] at step2
-  convert step2.mul_left (-(2 * ↑π * I) ^ k / (k ! : ℂ)) using 2 with n
+  convert step2.mul_left (-(2 * ↑π * I) ^ k / ((k)! : ℂ)) using 2 with n
   · rw [smul_eq_mul, ← mul_assoc, mul_div, mul_neg, div_mul_cancel₀, neg_neg, mul_pow _ (n : ℂ),
       ← div_div, div_self]
     · rw [Ne, pow_eq_zero_iff', not_and_or]
@@ -340,7 +340,7 @@ theorem hasSum_one_div_nat_pow_mul_fourier {k : ℕ} (hk : 2 ≤ k) {x : ℝ} (h
     HasSum
       (fun n : ℕ =>
         (1 : ℂ) / (n : ℂ) ^ k * (fourier n (x : 𝕌) + (-1 : ℂ) ^ k * fourier (-n) (x : 𝕌)))
-      (-(2 * π * I) ^ k / k ! * bernoulliFun k x) := by
+      (-(2 * π * I) ^ k / (k)! * bernoulliFun k x) := by
   convert (hasSum_one_div_pow_mul_fourier_mul_bernoulliFun hk hx).nat_add_neg using 1
   · ext1 n
     rw [Int.cast_neg, mul_add, ← mul_assoc]

@@ -57,7 +57,7 @@ theorem normal_of_index_eq_minFac_card (hHp : H.index = (Nat.card G).minFac) :
   have index_ne_zero : H.index ≠ 0 := index_ne_zero_of_finite
   rw [← mul_left_inj' index_ne_zero, one_mul, relIndex_mul_index H.normalCore_le]
   have hp : Nat.Prime H.index := hHp ▸ minFac_prime hG1
-  have h : H.normalCore.index ∣ H.index ! := by
+  have h : H.normalCore.index ∣ (H.index)! := by
     rw [normalCore_eq_ker, index_ker, index_eq_card, ← Nat.card_perm]
     exact card_subgroup_dvd_card (toPermHom G (G ⧸ H)).range
   apply dvd_antisymm _ (index_dvd_of_le H.normalCore_le)

@@ -58,7 +58,7 @@ partial def proveAscFactorial (n l : ℕ) (en el : Q(ℕ)) :
     ⟨a * b, eab, q(by convert asc_factorial_aux $en $em $er $ea $eb $a_prf $b_prf)⟩
 
 lemma isNat_factorial {n x : ℕ} (h₁ : IsNat n x) (a : ℕ) (h₂ : (1).ascFactorial x = a) :
-    IsNat (n !) a := by
+    IsNat ((n)!) a := by
   constructor
   simp only [h₁.out, cast_id, ← h₂, one_ascFactorial]
 

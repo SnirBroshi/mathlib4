@@ -37,13 +37,13 @@ def S (c : Fin n → ℤ) (a : Perm (Fin n)) : ℤ := ∑ i, c i * (a i + 1)
 
 /-- Assuming the opposite of what is to be proved, the sum of `S` over all permutations is
 congruent to the sum of all residues modulo `n!`, i.e. `n! * (n! - 1) / 2`. -/
-lemma sum_range_modEq_sum_of_contra (hS : ¬∃ a b, a ≠ b ∧ (n ! : ℤ) ∣ S c a - S c b) :
-    n ! * ((n ! : ℤ) - 1) / 2 ≡ ∑ a, S c a [ZMOD n !] := by
-  have mir : ∀ a, S c a % n ! ∈ Ico (0 : ℤ) n ! := fun a ↦ by
+lemma sum_range_modEq_sum_of_contra (hS : ¬∃ a b, a ≠ b ∧ ((n)! : ℤ) ∣ S c a - S c b) :
+    (n)! * (((n)! : ℤ) - 1) / 2 ≡ ∑ a, S c a [ZMOD (n)!] := by
+  have mir : ∀ a, S c a % (n)! ∈ Ico (0 : ℤ) (n)! := fun a ↦ by
     rw [mem_Ico]; constructor
     · exact Int.emod_nonneg _ (by positivity)
     · exact Int.emod_lt_of_pos _ (by positivity)
-  let f : Perm (Fin n) → Ico (0 : ℤ) n ! := fun a ↦ ⟨_, mir a⟩
+  let f : Perm (Fin n) → Ico (0 : ℤ) (n)! := fun a ↦ ⟨_, mir a⟩
   have bijf : Function.Bijective f := by
     rw [Fintype.bijective_iff_injective_and_card, Fintype.card_coe, Int.card_Ico, sub_zero,
       Int.toNat_natCast, Fintype.card_perm, Fintype.card_fin, Function.Injective]
@@ -53,11 +53,11 @@ lemma sum_range_modEq_sum_of_contra (hS : ¬∃ a b, a ≠ b ∧ (n ! : ℤ) ∣
     use a, b, hn
     simp only [f, Subtype.mk.injEq] at he
     exact Int.ModEq.dvd he.symm
-  let e : Perm (Fin n) ≃ Ico (0 : ℤ) n ! := ofBijective _ bijf
+  let e : Perm (Fin n) ≃ Ico (0 : ℤ) (n)! := ofBijective _ bijf
   change _ % _ = _ % _; rw [sum_int_mod]; congr 1
   change _ = ∑ i, (e i).1; rw [Equiv.sum_comp]
   change _ = ∑ i : { x // x ∈ _ }, id i.1; simp_rw [sum_coe_sort, id_eq]
-  have Ico_eq : Ico (0 : ℤ) n ! = (range n !).map ⟨_, Nat.cast_injective⟩ := by
+  have Ico_eq : Ico (0 : ℤ) (n)! = (range (n)!).map ⟨_, Nat.cast_injective⟩ := by
     ext i
     simp_rw [mem_Ico, mem_map, mem_range, Function.Embedding.coeFn_mk]
     constructor <;> intro h
@@ -82,7 +82,7 @@ lemma sum_perm_add_one {i : Fin n} (hn : 1 ≤ n) :
   rw [Fin.sum_univ_eq_sum_range (· + 1), ← es, sum_range_id, add_tsub_cancel_right, mul_comm]
 
 /-- For odd `n`, the sum of `S` over all permutations is divisible by `n!`. -/
-lemma sum_modEq_zero_of_odd (hn : Odd n) : ∑ a, S c a ≡ 0 [ZMOD n !] := by
+lemma sum_modEq_zero_of_odd (hn : Odd n) : ∑ a, S c a ≡ 0 [ZMOD (n)!] := by
   unfold S; rw [sum_comm]
   conv_lhs => enter [2, i, 2, a]; rw [← Nat.cast_one, ← Nat.cast_add]
   simp_rw [← mul_sum, ← Nat.cast_sum]
@@ -93,14 +93,14 @@ lemma sum_modEq_zero_of_odd (hn : Odd n) : ∑ a, S c a ≡ 0 [ZMOD n !] := by
     Nat.mul_factorial_pred hn.pos.ne', Nat.cast_mul, ← mul_assoc, ← mul_rotate]
   exact (Int.dvd_mul_left ..).modEq_zero_int
 
-theorem result (hn : Odd n ∧ 1 < n) : ∃ a b, a ≠ b ∧ (n ! : ℤ) ∣ S c a - S c b := by
+theorem result (hn : Odd n ∧ 1 < n) : ∃ a b, a ≠ b ∧ ((n)! : ℤ) ∣ S c a - S c b := by
   by_contra h
   have key := (sum_range_modEq_sum_of_contra h).trans (sum_modEq_zero_of_odd hn.1)
   rw [Int.modEq_zero_iff_dvd, dvd_def] at key; obtain ⟨c, hc⟩ := key
-  have feven : 2 ∣ (n ! : ℤ) := mod_cast Nat.dvd_factorial zero_lt_two hn.2
+  have feven : 2 ∣ ((n)! : ℤ) := mod_cast Nat.dvd_factorial zero_lt_two hn.2
   nth_rw 3 [← Int.ediv_mul_cancel feven] at hc
   rw [mul_comm, Int.mul_ediv_assoc _ feven, mul_rotate] at hc
-  have halfpos : 0 < (n ! : ℤ) / 2 :=
+  have halfpos : 0 < ((n)! : ℤ) / 2 :=
     Int.ediv_pos_of_pos_of_dvd (by positivity) zero_le_two feven
   rw [mul_left_inj' halfpos.ne', sub_eq_iff_eq_add] at hc
   rw [← even_iff_two_dvd, ← Int.not_odd_iff_even] at feven

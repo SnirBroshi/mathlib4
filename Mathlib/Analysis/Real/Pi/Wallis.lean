@@ -59,7 +59,7 @@ theorem W_pos (k : ℕ) : 0 < W k := by
     refine mul_pos hk (mul_pos (div_pos ?_ ?_) (div_pos ?_ ?_)) <;> positivity
 
 theorem W_eq_factorial_ratio (n : ℕ) :
-    W n = 2 ^ (4 * n) * n ! ^ 4 / ((2 * n)! ^ 2 * (2 * n + 1)) := by
+    W n = 2 ^ (4 * n) * (n)! ^ 4 / ((2 * n)! ^ 2 * (2 * n + 1)) := by
   induction n with
   | zero =>
     simp only [W, prod_range_zero, Nat.factorial_zero, mul_zero, pow_zero]

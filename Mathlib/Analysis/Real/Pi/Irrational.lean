@@ -196,7 +196,7 @@ The key lemma: the sequence of integrals `I` can be written as a linear combinat
 -/
 private lemma sinPoly_add_cosPoly_eval (θ : ℝ) :
     ∀ n : ℕ,
-      I n θ * θ ^ (2 * n + 1) = n ! * ((sinPoly n).eval₂ (Int.castRingHom _) θ * sin θ +
+      I n θ * θ ^ (2 * n + 1) = (n)! * ((sinPoly n).eval₂ (Int.castRingHom _) θ * sin θ +
         (cosPoly n).eval₂ (Int.castRingHom _) θ * cos θ)
   | 0 => by simp [sinPoly, cosPoly, I_zero]
   | 1 => by simp [I_one, sinPoly, cosPoly, sub_eq_add_neg]
@@ -265,7 +265,7 @@ For any real `a`, we have that `a ^ (2n+1) / n!` tends to `0` as `n → ∞`.  T
 reformulation of tendsto_pow_div_factorial_atTop, which asserts the same for `a ^ n / n!`
 -/
 private lemma tendsto_pow_div_factorial_at_top_aux (a : ℝ) :
-    Tendsto (fun n => (a : ℝ) ^ (2 * n + 1) / n !) atTop (nhds 0) := by
+    Tendsto (fun n => (a : ℝ) ^ (2 * n + 1) / (n)!) atTop (nhds 0) := by
   rw [← mul_zero a]
   refine ((FloorSemiring.tendsto_pow_div_factorial_atTop (a ^ 2)).const_mul a).congr (fun x => ?_)
   rw [← pow_mul, mul_div_assoc', _root_.pow_succ']
@@ -285,20 +285,20 @@ private lemma not_irrational_exists_rep {x : ℝ} :
   have ha : (0 : ℝ) < a := by
     have : 0 < (a : ℝ) / b := h ▸ pi_div_two_pos
     rwa [lt_div_iff₀ (by positivity), zero_mul] at this
-  have k (n : ℕ) : 0 < (a : ℝ) ^ (2 * n + 1) / n ! := by positivity
-  have j : ∀ᶠ n : ℕ in atTop, (a : ℝ) ^ (2 * n + 1) / n ! * I n (π / 2) < 1 := by
+  have k (n : ℕ) : 0 < (a : ℝ) ^ (2 * n + 1) / (n)! := by positivity
+  have j : ∀ᶠ n : ℕ in atTop, (a : ℝ) ^ (2 * n + 1) / (n)! * I n (π / 2) < 1 := by
     have := (tendsto_pow_div_factorial_at_top_aux a).eventually_lt_const
       (show (0 : ℝ) < 1 / 2 by simp)
     filter_upwards [this] with n hn
     rw [lt_div_iff₀ (zero_lt_two : (0 : ℝ) < 2)] at hn
     exact hn.trans_le' (mul_le_mul_of_nonneg_left (I_le _) (by positivity))
   obtain ⟨n, hn⟩ := j.exists
-  have hn' : 0 < a ^ (2 * n + 1) / n ! * I n (π / 2) := mul_pos (k _) I_pos
+  have hn' : 0 < a ^ (2 * n + 1) / (n)! * I n (π / 2) := mul_pos (k _) I_pos
   obtain ⟨z, hz⟩ : ∃ z : ℤ, (sinPoly n).eval₂ (Int.castRingHom ℝ) (a / b) * b ^ (2 * n + 1) = z :=
     is_integer a b ((sinPoly_natDegree_le _).trans (by lia))
   have e := sinPoly_add_cosPoly_eval (π / 2) n
   rw [cos_pi_div_two, sin_pi_div_two, mul_zero, mul_one, add_zero] at e
-  have : a ^ (2 * n + 1) / n ! * I n (π / 2) =
+  have : a ^ (2 * n + 1) / (n)! * I n (π / 2) =
       eval₂ (Int.castRingHom ℝ) (π / 2) (sinPoly n) * b ^ (2 * n + 1) := by
     nth_rw 2 [h] at e
     simp [field, div_pow] at e ⊢

@@ -52,7 +52,7 @@ theorem superFactorial_two : sf 2 = 2 :=
 open Finset
 
 @[simp]
-theorem prod_Icc_factorial : ∀ n : ℕ, ∏ x ∈ Icc 1 n, x ! = sf n
+theorem prod_Icc_factorial : ∀ n : ℕ, ∏ x ∈ Icc 1 n, (x)! = sf n
   | 0 => rfl
   | n + 1 => by
     rw [← Ico_add_one_right_eq_Icc 1, prod_Ico_succ_top le_add_self, Nat.factorial_succ,
@@ -63,13 +63,13 @@ theorem prod_range_factorial_succ (n : ℕ) : ∏ x ∈ range n, (x + 1)! = sf n
   (prod_Icc_factorial n) ▸ range_eq_Ico ▸ Finset.prod_Ico_add' _ _ _ _
 
 @[simp]
-theorem prod_range_succ_factorial : ∀ n : ℕ, ∏ x ∈ range (n + 1), x ! = sf n
+theorem prod_range_succ_factorial : ∀ n : ℕ, ∏ x ∈ range (n + 1), (x)! = sf n
   | 0 => rfl
   | n + 1 => by
     rw [prod_range_succ, prod_range_succ_factorial n, mul_comm, superFactorial]
 
 theorem superFactorial_two_mul : ∀ n : ℕ,
-    sf (2 * n) = (∏ i ∈ range n, (2 * i + 1)!) ^ 2 * 2 ^ n * n !
+    sf (2 * n) = (∏ i ∈ range n, (2 * i + 1)!) ^ 2 * 2 ^ n * (n)!
   | 0 => rfl
   | (n + 1) => by
     simp only [prod_range_succ, mul_pow, mul_add, mul_one, superFactorial_succ,

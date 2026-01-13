@@ -106,7 +106,7 @@ theorem sumIDeriv_eq_self_add (p : R[X]) : sumIDeriv p = p + derivative (sumIDer
     Function.iterate_zero_apply, iterate_derivative_eq_zero (Nat.lt_succ_self _)]
 
 theorem exists_iterate_derivative_eq_factorial_smul (p : R[X]) (k : ℕ) :
-    ∃ gp : R[X], gp.natDegree ≤ p.natDegree - k ∧ derivative^[k] p = k ! • gp := by
+    ∃ gp : R[X], gp.natDegree ≤ p.natDegree - k ∧ derivative^[k] p = (k)! • gp := by
   refine ⟨_, (natDegree_sum_le _ _).trans ?_, iterate_derivative_eq_factorial_smul_sum p k⟩
   rw [fold_max_le]
   refine ⟨Nat.zero_le _, fun i hi => ?_⟩
@@ -134,7 +134,7 @@ theorem aeval_iterate_derivative_of_lt (p : R[X]) (q : ℕ) (r : A) {p' : A[X]}
 
 theorem aeval_iterate_derivative_self (p : R[X]) (q : ℕ) (r : A) {p' : A[X]}
     (hp : p.map (algebraMap R A) = (X - C r) ^ q * p') :
-    aeval r (derivative^[q] p) = q ! • p'.eval r := by
+    aeval r (derivative^[q] p) = (q)! • p'.eval r := by
   have h (x) (h : 1 ≤ x) (h' : x ≤ q) :
       (X - C r) ^ (q - (q - x)) = (X - C r) ^ 1 * (X - C r) ^ (q - (q - x) - 1) := by
     rw [← pow_add, add_tsub_cancel_of_le]
@@ -155,7 +155,7 @@ variable (A)
 
 theorem aeval_iterate_derivative_of_ge (p : R[X]) (q : ℕ) {k : ℕ} (hk : q ≤ k) :
     ∃ gp : R[X], gp.natDegree ≤ p.natDegree - k ∧
-      ∀ r : A, aeval r (derivative^[k] p) = q ! • aeval r gp := by
+      ∀ r : A, aeval r (derivative^[k] p) = (q)! • aeval r gp := by
   obtain ⟨p', p'_le, hp'⟩ := exists_iterate_derivative_eq_factorial_smul p k
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hk
   refine ⟨((q + k).descFactorial k : R[X]) * p', (natDegree_C_mul_le _ _).trans p'_le, fun r => ?_⟩
@@ -169,11 +169,11 @@ theorem aeval_sumIDeriv_eq_eval (p : R[X]) (r : A) :
 theorem aeval_sumIDeriv (p : R[X]) (q : ℕ) :
     ∃ gp : R[X], gp.natDegree ≤ p.natDegree - q ∧
       ∀ (r : A), (X - C r) ^ q ∣ p.map (algebraMap R A) →
-        aeval r (sumIDeriv p) = q ! • aeval r gp := by
+        aeval r (sumIDeriv p) = (q)! • aeval r gp := by
   have h (k) :
       ∃ gp : R[X], gp.natDegree ≤ p.natDegree - q ∧
         ∀ (r : A), (X - C r) ^ q ∣ p.map (algebraMap R A) →
-          aeval r (derivative^[k] p) = q ! • aeval r gp := by
+          aeval r (derivative^[k] p) = (q)! • aeval r gp := by
     cases lt_or_ge k q with
     | inl hk =>
       use 0
@@ -198,7 +198,7 @@ theorem aeval_sumIDeriv_of_pos [Nontrivial A] [NoZeroDivisors A] (p : R[X]) {q :
     ∃ gp : R[X], gp.natDegree ≤ p.natDegree - q ∧
       ∀ (r : A) {p' : A[X]},
         p.map (algebraMap R A) = (X - C r) ^ (q - 1) * p' →
-        aeval r (sumIDeriv p) = (q - 1)! • p'.eval r + q ! • aeval r gp := by
+        aeval r (sumIDeriv p) = (q - 1)! • p'.eval r + (q)! • aeval r gp := by
   rcases eq_or_ne p 0 with (rfl | p0)
   · use 0
     rw [natDegree_zero]
@@ -215,7 +215,7 @@ theorem aeval_sumIDeriv_of_pos [Nontrivial A] [NoZeroDivisors A] (p : R[X]) {q :
     split_ifs with h
     · exact (aeval_iterate_derivative_of_ge A p q h).choose_spec.1
     · rw [natDegree_zero]; exact Nat.zero_le _
-  have hc (k) (hk : q ≤ k) : ∀ (r : A), aeval r (derivative^[k] p) = q ! • aeval r (c k) := by
+  have hc (k) (hk : q ≤ k) : ∀ (r : A), aeval r (derivative^[k] p) = (q)! • aeval r (c k) := by
     simp_rw [c, dif_pos hk]
     exact (aeval_iterate_derivative_of_ge A p q hk).choose_spec.2
   refine ⟨∑ x ∈ Ico q (p.natDegree + 1), c x, ?_, ?_⟩
@@ -259,7 +259,7 @@ theorem eval_sumIDeriv_of_pos
     ∃ gp : R[X], gp.natDegree ≤ p.natDegree - q ∧
       ∀ (r : R) {p' : R[X]},
         p = ((X : R[X]) - C r) ^ (q - 1) * p' →
-        eval r (sumIDeriv p) = (q - 1)! • p'.eval r + q ! • eval r gp := by
+        eval r (sumIDeriv p) = (q - 1)! • p'.eval r + (q)! • eval r gp := by
   simpa using aeval_sumIDeriv_of_pos R p hq Function.injective_id
 
 end Polynomial

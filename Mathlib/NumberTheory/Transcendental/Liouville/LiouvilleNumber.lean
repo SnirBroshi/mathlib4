@@ -49,7 +49,7 @@ The series converges only for `1 < m`. However, there is no restriction on `m`, 
 if the series does not converge, then the sum of the series is defined to be zero.
 -/
 def liouvilleNumber (m : ℝ) : ℝ :=
-  ∑' i : ℕ, 1 / m ^ i !
+  ∑' i : ℕ, 1 / m ^ (i)!
 
 namespace LiouvilleNumber
 
@@ -60,7 +60,7 @@ $$
 $$
 -/
 def partialSum (m : ℝ) (k : ℕ) : ℝ :=
-  ∑ i ∈ range (k + 1), 1 / m ^ i !
+  ∑ i ∈ range (k + 1), 1 / m ^ (i)!
 
 /-- `LiouvilleNumber.remainder` is the sum of the series of the terms in `liouvilleNumber m`
 starting from `k+1`, i.e
@@ -76,7 +76,7 @@ We start with simple observations.
 -/
 
 
-protected theorem summable {m : ℝ} (hm : 1 < m) : Summable fun i : ℕ => 1 / m ^ i ! :=
+protected theorem summable {m : ℝ} (hm : 1 < m) : Summable fun i : ℕ => 1 / m ^ (i)! :=
   summable_one_div_pow_of_le hm Nat.self_le_factorial
 
 theorem remainder_summable {m : ℝ} (hm : 1 < m) (k : ℕ) :
@@ -128,15 +128,15 @@ theorem remainder_lt' (n : ℕ) {m : ℝ} (m1 : 1 < m) :
     _ = (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) := by rw [tsum_geometric_of_lt_one (by positivity) mi]
 
 theorem aux_calc (n : ℕ) {m : ℝ} (hm : 2 ≤ m) :
-    (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) ≤ 1 / (m ^ n !) ^ n :=
+    (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) ≤ 1 / (m ^ (n)!) ^ n :=
   calc
     (1 - 1 / m)⁻¹ * (1 / m ^ (n + 1)!) ≤ 2 * (1 / m ^ (n + 1)!) := by
       -- the second factors coincide (and are non-negative),
       -- the first factors satisfy the inequality `sub_one_div_inv_le_two`
       gcongr; exact sub_one_div_inv_le_two hm
     _ = 2 / m ^ (n + 1)! := mul_one_div 2 _
-    _ = 2 / m ^ (n ! * (n + 1)) := (congr_arg (2 / ·) (congr_arg (Pow.pow m) (mul_comm _ _)))
-    _ ≤ 1 / (m ^ n !) ^ n := by
+    _ = 2 / m ^ ((n)! * (n + 1)) := (congr_arg (2 / ·) (congr_arg (Pow.pow m) (mul_comm _ _)))
+    _ ≤ 1 / (m ^ (n)!) ^ n := by
       -- Clear denominators and massage*
       rw [← pow_mul, div_le_div_iff₀, one_mul, mul_add_one, pow_add, mul_comm 2]
       · gcongr
@@ -147,7 +147,7 @@ theorem aux_calc (n : ℕ) {m : ℝ} (hm : 2 ≤ m) :
 /-- An upper estimate on the remainder. This estimate works with `m ∈ ℝ` satisfying `2 ≤ m` and is
 weaker than the estimate `LiouvilleNumber.remainder_lt'` above. However, this estimate is
 more useful for the proof. -/
-theorem remainder_lt (n : ℕ) {m : ℝ} (m2 : 2 ≤ m) : remainder m n < 1 / (m ^ n !) ^ n :=
+theorem remainder_lt (n : ℕ) {m : ℝ} (m2 : 2 ≤ m) : remainder m n < 1 / (m ^ (n)!) ^ n :=
   (remainder_lt' n <| one_lt_two.trans_le m2).trans_le (aux_calc _ m2)
 
 /-! Starting from here, we specialize to the case in which `m` is a natural number. -/
@@ -156,13 +156,13 @@ theorem remainder_lt (n : ℕ) {m : ℝ} (m2 : 2 ≤ m) : remainder m n < 1 / (m
 /-- The sum of the `k` initial terms of the Liouville number to base `m` is a ratio of natural
 numbers where the denominator is `m ^ k!`. -/
 theorem partialSum_eq_rat {m : ℕ} (hm : 0 < m) (k : ℕ) :
-    ∃ p : ℕ, partialSum m k = p / ((m ^ k ! :) : ℝ) := by
+    ∃ p : ℕ, partialSum m k = p / ((m ^ (k)! :) : ℝ) := by
   induction k with
   | zero => exact ⟨1, by rw [partialSum, range_one, sum_singleton, Nat.cast_one, Nat.factorial,
       pow_one, pow_one]⟩
   | succ k h =>
     rcases h with ⟨p_k, h_k⟩
-    use p_k * m ^ ((k + 1)! - k !) + 1
+    use p_k * m ^ ((k + 1)! - (k)!) + 1
     rw [partialSum_succ, h_k, div_add_div, div_eq_div_iff, add_mul]
     · norm_cast
       rw [add_mul, one_mul, Nat.factorial_succ, add_mul, one_mul, add_tsub_cancel_right, pow_add]
@@ -180,7 +180,7 @@ theorem liouville_liouvilleNumber {m : ℕ} (hm : 2 ≤ m) : Liouville (liouvill
   intro n
   -- the first `n` terms sum to `p / m ^ k!`
   rcases partialSum_eq_rat (zero_lt_two.trans_le hm) n with ⟨p, hp⟩
-  refine ⟨p, m ^ n !, one_lt_pow₀ mZ1 n.factorial_ne_zero, ?_⟩
+  refine ⟨p, m ^ (n)!, one_lt_pow₀ mZ1 n.factorial_ne_zero, ?_⟩
   push_cast
   rw [Nat.cast_pow] at hp
   -- separate out the sum of the first `n` terms and the rest

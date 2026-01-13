@@ -100,11 +100,11 @@ theorem emultiplicity_pow_self {p n : ℕ} (hp : p.Prime) : emultiplicity p (p ^
 The multiplicity of a prime in `n!` is the sum of the quotients `n / p ^ i`. This sum is expressed
 over the finset `Ico 1 b` where `b` is any bound greater than `log p n`. -/
 theorem emultiplicity_factorial {p : ℕ} (hp : p.Prime) :
-    ∀ {n b : ℕ}, log p n < b → emultiplicity p n ! = (∑ i ∈ Ico 1 b, n / p ^ i : ℕ)
+    ∀ {n b : ℕ}, log p n < b → emultiplicity p (n)! = (∑ i ∈ Ico 1 b, n / p ^ i : ℕ)
   | 0, b, _ => by simp [Ico, hp.emultiplicity_one]
   | n + 1, b, hb =>
     calc
-      emultiplicity p (n + 1)! = emultiplicity p n ! + emultiplicity p (n + 1) := by
+      emultiplicity p (n + 1)! = emultiplicity p (n)! + emultiplicity p (n + 1) := by
         rw [factorial_succ, hp.emultiplicity_mul, add_comm]
       _ = (∑ i ∈ Ico 1 b, n / p ^ i : ℕ) + #{i ∈ Ico 1 b | p ^ i ∣ n + 1} := by
         rw [emultiplicity_factorial hp ((log_mono_right <| le_succ _).trans_lt hb), ←
@@ -118,7 +118,7 @@ theorem emultiplicity_factorial {p : ℕ} (hp : p.Prime) :
 /-- For a prime number `p`, taking `(p - 1)` times the multiplicity of `p` in `n!` equals `n` minus
 the sum of base `p` digits of `n`. -/
 theorem sub_one_mul_multiplicity_factorial {n p : ℕ} (hp : p.Prime) :
-    (p - 1) * multiplicity p n ! =
+    (p - 1) * multiplicity p (n)! =
     n - (p.digits n).sum := by
   simp only [multiplicity_eq_of_emultiplicity_eq_some <|
       emultiplicity_factorial hp <| lt_succ_of_lt <| Nat.lt_add_one (log p n),
@@ -151,7 +151,7 @@ theorem emultiplicity_factorial_mul_succ {n p : ℕ} (hp : p.Prime) :
 
 /-- The multiplicity of `p` in `(p * n)!` is `n` more than that of `n!`. -/
 theorem emultiplicity_factorial_mul {n p : ℕ} (hp : p.Prime) :
-    emultiplicity p (p * n)! = emultiplicity p n ! + n := by
+    emultiplicity p (p * n)! = emultiplicity p (n)! + n := by
   induction n with
   | zero => simp
   | succ n ih =>
@@ -174,12 +174,12 @@ theorem multiplicity_factorial_pow {n p : ℕ} (hp : p.Prime) :
 /-- A prime power divides `n!` iff it is at most the sum of the quotients `n / p ^ i`.
   This sum is expressed over the set `Ico 1 b` where `b` is any bound greater than `log p n` -/
 theorem pow_dvd_factorial_iff {p : ℕ} {n r b : ℕ} (hp : p.Prime) (hbn : log p n < b) :
-    p ^ r ∣ n ! ↔ r ≤ ∑ i ∈ Ico 1 b, n / p ^ i := by
+    p ^ r ∣ (n)! ↔ r ≤ ∑ i ∈ Ico 1 b, n / p ^ i := by
   rw [← WithTop.coe_le_coe, ENat.some_eq_coe, ← hp.emultiplicity_factorial hbn,
     pow_dvd_iff_le_emultiplicity]
 
 theorem emultiplicity_factorial_le_div_pred {p : ℕ} (hp : p.Prime) (n : ℕ) :
-    emultiplicity p n ! ≤ (n / (p - 1) : ℕ) := by
+    emultiplicity p (n)! ≤ (n / (p - 1) : ℕ) := by
   rw [hp.emultiplicity_factorial (lt_succ_self _)]
   apply WithTop.coe_mono
   exact Nat.geom_sum_Ico_le hp.two_le _ _
@@ -190,8 +190,8 @@ theorem emultiplicity_factorial_le_div_pred {p : ℕ} (hp : p.Prime) (n : ℕ) :
 theorem emultiplicity_choose' {p n k b : ℕ} (hp : p.Prime) (hnb : log p (n + k) < b) :
     emultiplicity p (choose (n + k) k) = #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} := by
   have h₁ :
-      emultiplicity p (choose (n + k) k) + emultiplicity p (k ! * n !) =
-        #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} + emultiplicity p (k ! * n !) := by
+      emultiplicity p (choose (n + k) k) + emultiplicity p ((k)! * (n)!) =
+        #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} + emultiplicity p ((k)! * (n)!) := by
     rw [← hp.emultiplicity_mul, ← mul_assoc]
     have := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
     rw [this, hp.emultiplicity_factorial hnb, hp.emultiplicity_mul,
@@ -269,7 +269,7 @@ theorem dvd_choose_pow_iff (hp : Prime p) : p ∣ (p ^ n).choose k ↔ k ≠ 0 �
 
 end Prime
 
-theorem emultiplicity_two_factorial_lt : ∀ {n : ℕ} (_ : n ≠ 0), emultiplicity 2 n ! < n := by
+theorem emultiplicity_two_factorial_lt : ∀ {n : ℕ} (_ : n ≠ 0), emultiplicity 2 (n)! < n := by
   have h2 := prime_two.prime
   refine binaryRec ?_ ?_
   · exact fun h => False.elim <| h rfl

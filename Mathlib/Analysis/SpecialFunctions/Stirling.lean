@@ -54,7 +54,7 @@ https://proofwiki.org/wiki/Stirling%27s_Formula#Part_1
 Stirling's formula states that this sequence has limit $\sqrt(π)$.
 -/
 noncomputable def stirlingSeq (n : ℕ) : ℝ :=
-  n ! / (√(2 * n : ℝ) * (n / exp 1) ^ n)
+  (n)! / (√(2 * n : ℝ) * (n / exp 1) ^ n)
 
 @[simp]
 theorem stirlingSeq_zero : stirlingSeq 0 = 0 := by
@@ -65,7 +65,7 @@ theorem stirlingSeq_one : stirlingSeq 1 = exp 1 / √2 := by
   rw [stirlingSeq, pow_one, factorial_one, cast_one, mul_one, mul_one_div, one_div_div]
 
 theorem log_stirlingSeq_formula (n : ℕ) :
-    log (stirlingSeq n) = Real.log n ! - 1 / 2 * Real.log (2 * n) - n * log (n / exp 1) := by
+    log (stirlingSeq n) = Real.log (n)! - 1 / 2 * Real.log (2 * n) - n * log (n / exp 1) := by
   cases n
   · simp
   · rw [stirlingSeq, log_div, log_mul, sqrt_eq_rpow, log_rpow, Real.log_pow, tsub_tsub]
@@ -233,7 +233,7 @@ theorem tendsto_stirlingSeq_sqrt_pi : Tendsto stirlingSeq atTop (𝓝 (√π)) :
 
 /-- **Stirling's Formula**, formulated in terms of `Asymptotics.IsEquivalent`. -/
 lemma factorial_isEquivalent_stirling :
-    (fun n ↦ n ! : ℕ → ℝ) ~[atTop] fun n ↦ Real.sqrt (2 * n * π) * (n / exp 1) ^ n := by
+    (fun n ↦ (n)! : ℕ → ℝ) ~[atTop] fun n ↦ Real.sqrt (2 * n * π) * (n / exp 1) ^ n := by
   refine Asymptotics.isEquivalent_of_tendsto_one ?_ ?_
   · filter_upwards [eventually_ne_atTop 0] with n hn h
     exact absurd h (by positivity)
@@ -263,7 +263,7 @@ statement gives an upper bound also, but requires sufficiently large `n`. In con
 only a lower bound, but holds for all `n`.
 Sharper bounds due to Robbins are available, but are not yet formalised.
 -/
-theorem le_factorial_stirling (n : ℕ) : √(2 * π * n) * (n / exp 1) ^ n ≤ n ! := by
+theorem le_factorial_stirling (n : ℕ) : √(2 * π * n) * (n / exp 1) ^ n ≤ (n)! := by
   obtain rfl | hn := eq_or_ne n 0
   · simp
   have : √(2 * π * n) * (n / exp 1) ^ n = √π * (√(2 * n) * (n / exp 1) ^ n) := by
@@ -281,7 +281,7 @@ Sharper bounds due to Robbins are available, but are not yet formalised. These w
 lower order terms (beginning with `(12 * n)⁻¹`) to the left-hand side.
 -/
 theorem le_log_factorial_stirling {n : ℕ} (hn : n ≠ 0) :
-    n * log n - n + log n / 2 + log (2 * π) / 2 ≤ log n ! := by
+    n * log n - n + log n / 2 + log (2 * π) / 2 ≤ log (n)! := by
   calc
     _ = (log (2 * π) + log n) / 2 + n * (log n - 1) := by ring
     _ = log (√(2 * π * n) * (n / rexp 1) ^ n) := by

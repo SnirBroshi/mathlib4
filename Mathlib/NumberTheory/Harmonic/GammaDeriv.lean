@@ -30,7 +30,7 @@ namespace Real
 /-- Explicit formula for the derivative of the Gamma function at positive integers, in terms of
 harmonic numbers and the Euler-Mascheroni constant `γ`. -/
 lemma deriv_Gamma_nat (n : ℕ) :
-    deriv Gamma (n + 1) = n ! * (-γ + harmonic n) := by
+    deriv Gamma (n + 1) = (n)! * (-γ + harmonic n) := by
   /- This follows from two properties of the function `f n = log (Gamma n)`:
   firstly, the elementary computation that `deriv f (n + 1) = deriv f n + 1 / n`, so that
   `deriv f n = deriv f 1 + harmonic n`; secondly, the convexity of `f` (the Bohr-Mollerup theorem),
@@ -85,7 +85,7 @@ lemma deriv_Gamma_nat (n : ℕ) :
 
 
 lemma hasDerivAt_Gamma_nat (n : ℕ) :
-    HasDerivAt Gamma (n ! * (-γ + harmonic n)) (n + 1) :=
+    HasDerivAt Gamma ((n)! * (-γ + harmonic n)) (n + 1) :=
   (deriv_Gamma_nat n).symm ▸
     (differentiableAt_Gamma fun m ↦ (by linarith : (n : ℝ) + 1 ≠ -m)).hasDerivAt
 
@@ -168,7 +168,7 @@ lemma differentiableAt_Gamma_nat_add_one (n : ℕ) :
   positivity
 
 lemma hasDerivAt_Gamma_nat (n : ℕ) :
-    HasDerivAt Gamma (n ! * (-γ + harmonic n)) (n + 1) := by
+    HasDerivAt Gamma ((n)! * (-γ + harmonic n)) (n + 1) := by
   exact_mod_cast HasDerivAt.complex_of_real
     (by exact_mod_cast differentiableAt_Gamma_nat_add_one n)
     (Real.hasDerivAt_Gamma_nat n) Gamma_ofReal
@@ -176,7 +176,7 @@ lemma hasDerivAt_Gamma_nat (n : ℕ) :
 /-- Explicit formula for the derivative of the complex Gamma function at positive integers, in
 terms of harmonic numbers and the Euler-Mascheroni constant `γ`. -/
 lemma deriv_Gamma_nat (n : ℕ) :
-    deriv Gamma (n + 1) = n ! * (-γ + harmonic n) :=
+    deriv Gamma (n + 1) = (n)! * (-γ + harmonic n) :=
   (hasDerivAt_Gamma_nat n).deriv
 
 lemma hasDerivAt_Gamma_one : HasDerivAt Gamma (-γ) 1 := by

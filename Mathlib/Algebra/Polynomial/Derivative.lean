@@ -340,7 +340,7 @@ theorem iterate_derivative_eq_sum (p : R[X]) (k : ℕ) :
   rw [coeff_iterate_derivative, Nat.descFactorial_eq_factorial_mul_choose]
 
 theorem iterate_derivative_eq_factorial_smul_sum (p : R[X]) (k : ℕ) :
-    derivative^[k] p = k ! •
+    derivative^[k] p = (k)! •
       ∑ x ∈ (derivative^[k] p).support, C ((x + k).choose k • p.coeff (x + k)) * X ^ x := by
   conv_lhs => rw [iterate_derivative_eq_sum]
   rw [smul_sum]

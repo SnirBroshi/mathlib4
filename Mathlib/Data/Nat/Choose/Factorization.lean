@@ -113,8 +113,8 @@ added in base `p`. The set is expressed by filtering `Ico 1 b` where `b` is any 
 than `log p (n + k)`. -/
 theorem factorization_choose' {p n k b : ℕ} (hp : p.Prime) (hnb : log p (n + k) < b) :
     (choose (n + k) k).factorization p = #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} := by
-  have h₁ : (choose (n + k) k).factorization p + (k ! * n !).factorization p
-    = #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} + (k ! * n !).factorization p := by
+  have h₁ : (choose (n + k) k).factorization p + ((k)! * (n)!).factorization p
+    = #{i ∈ Ico 1 b | p ^ i ≤ k % p ^ i + n % p ^ i} + ((k)! * (n)!).factorization p := by
     have h2 := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
     rw [← Pi.add_apply, ← coe_add, ← factorization_mul (ne_of_gt <| choose_pos (le_add_left k n))
       (by positivity), ← mul_assoc, h2,

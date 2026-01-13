@@ -105,10 +105,10 @@ variable (𝕂 𝔸 : Type*) [Field 𝕂] [Ring 𝔸] [Algebra 𝕂 𝔸] [Topol
 /-- `expSeries 𝕂 𝔸` is the `FormalMultilinearSeries` whose `n`-th term is the map
 `(xᵢ) : 𝔸ⁿ ↦ (1/n! : 𝕂) • ∏ xᵢ`. Its sum is the exponential map `NormedSpace.exp : 𝔸 → 𝔸`. -/
 def expSeries : FormalMultilinearSeries 𝕂 𝔸 𝔸 := fun n =>
-  (n !⁻¹ : 𝕂) • ContinuousMultilinearMap.mkPiAlgebraFin 𝕂 n 𝔸
+  ((n)!⁻¹ : 𝕂) • ContinuousMultilinearMap.mkPiAlgebraFin 𝕂 n 𝔸
 
 /-- The exponential series as an `ofScalars` series. -/
-theorem expSeries_eq_ofScalars : expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n ↦ (n !⁻¹ : 𝕂) := by
+theorem expSeries_eq_ofScalars : expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n ↦ ((n)!⁻¹ : 𝕂) := by
   simp_rw [FormalMultilinearSeries.ext_iff, expSeries, ofScalars, implies_true]
 
 variable {𝕂 𝔸}
@@ -131,13 +131,13 @@ noncomputable irreducible_def exp (x : 𝔸) : 𝔸 :=
     1
 
 theorem expSeries_apply_eq (x : 𝔸) (n : ℕ) :
-    (expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n := by simp [expSeries]
+    (expSeries 𝕂 𝔸 n fun _ => x) = ((n)!⁻¹ : 𝕂) • x ^ n := by simp [expSeries]
 
 theorem expSeries_apply_eq' (x : 𝔸) :
-    (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => (n !⁻¹ : 𝕂) • x ^ n :=
+    (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => ((n)!⁻¹ : 𝕂) • x ^ n :=
   funext (expSeries_apply_eq x)
 
-theorem expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, (n !⁻¹ : 𝕂) • x ^ n :=
+theorem expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, ((n)!⁻¹ : 𝕂) • x ^ n :=
   tsum_congr fun n => expSeries_apply_eq x n
 
 theorem expSeries_sum_eq_rat [Algebra ℚ 𝔸] : (expSeries 𝕂 𝔸).sum = (expSeries ℚ 𝔸).sum := by
@@ -154,18 +154,18 @@ theorem exp_eq_expSeries_sum [CharZero 𝕂] : exp = (expSeries 𝕂 𝔸).sum :
   rw [exp, dif_pos ⟨RestrictScalars.algebra ℚ 𝕂 𝔸⟩, ← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
 
 variable (𝕂) in
-theorem exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑' n : ℕ, (n !⁻¹ : 𝕂) • x ^ n := by
+theorem exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑' n : ℕ, ((n)!⁻¹ : 𝕂) • x ^ n := by
   rw [exp_eq_expSeries_sum 𝕂]
   ext x
   exact expSeries_sum_eq x
 
-theorem exp_eq_tsum_rat [Algebra ℚ 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, (n !⁻¹ : ℚ) • x ^ n :=
+theorem exp_eq_tsum_rat [Algebra ℚ 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, ((n)!⁻¹ : ℚ) • x ^ n :=
   exp_eq_tsum ℚ
 
 variable (𝕂) in
 /-- The exponential sum as an `ofScalarsSum`. -/
 theorem exp_eq_ofScalarsSum [CharZero 𝕂] :
-    exp = ofScalarsSum (E := 𝔸) fun n ↦ (n !⁻¹ : 𝕂) := by
+    exp = ofScalarsSum (E := 𝔸) fun n ↦ ((n)!⁻¹ : 𝕂) := by
   rw [exp_eq_tsum 𝕂, ofScalarsSum_eq_tsum]
 
 theorem expSeries_apply_zero (n : ℕ) :
@@ -237,18 +237,18 @@ section TopologicalDivisionAlgebra
 variable {𝕂 𝔸 : Type*} [Field 𝕂] [DivisionRing 𝔸] [Algebra 𝕂 𝔸] [TopologicalSpace 𝔸]
   [IsTopologicalRing 𝔸]
 
-theorem expSeries_apply_eq_div (x : 𝔸) (n : ℕ) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n ! := by
-  rw [div_eq_mul_inv, ← (Nat.cast_commute n ! (x ^ n)).inv_left₀.eq, ← smul_eq_mul,
+theorem expSeries_apply_eq_div (x : 𝔸) (n : ℕ) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / (n)! := by
+  rw [div_eq_mul_inv, ← (Nat.cast_commute (n)! (x ^ n)).inv_left₀.eq, ← smul_eq_mul,
     expSeries_apply_eq, inv_natCast_smul_eq 𝕂 𝔸]
 
 theorem expSeries_apply_eq_div' (x : 𝔸) :
-    (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => x ^ n / n ! :=
+    (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => x ^ n / (n)! :=
   funext (expSeries_apply_eq_div x)
 
-theorem expSeries_sum_eq_div (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, x ^ n / n ! :=
+theorem expSeries_sum_eq_div (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, x ^ n / (n)! :=
   tsum_congr (expSeries_apply_eq_div x)
 
-theorem exp_eq_tsum_div [CharZero 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, x ^ n / n ! := by
+theorem exp_eq_tsum_div [CharZero 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, x ^ n / (n)! := by
   rw [exp_eq_expSeries_sum ℚ]
   ext x
   exact expSeries_sum_eq_div x
@@ -269,7 +269,7 @@ theorem norm_expSeries_summable_of_mem_ball (x : 𝔸)
 
 theorem norm_expSeries_summable_of_mem_ball' (x : 𝔸)
     (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
-    Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖ := by
+    Summable fun n => ‖((n)!⁻¹ : 𝕂) • x ^ n‖ := by
   change Summable (norm ∘ _)
   rw [← expSeries_apply_eq']
   exact norm_expSeries_summable_of_mem_ball x hx
@@ -285,7 +285,7 @@ theorem expSeries_summable_of_mem_ball (x : 𝔸)
 
 theorem expSeries_summable_of_mem_ball' (x : 𝔸)
     (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
-    Summable fun n => (n !⁻¹ : 𝕂) • x ^ n :=
+    Summable fun n => ((n)!⁻¹ : 𝕂) • x ^ n :=
   (norm_expSeries_summable_of_mem_ball' x hx).of_norm
 
 theorem expSeries_hasSum_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸)
@@ -296,7 +296,7 @@ theorem expSeries_hasSum_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸)
 
 theorem expSeries_hasSum_exp_of_mem_ball' [CharZero 𝕂] (x : 𝔸)
     (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
-    HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x) := by
+    HasSum (fun n => ((n)!⁻¹ : 𝕂) • x ^ n) (exp x) := by
   rw [← expSeries_apply_eq']
   exact expSeries_hasSum_exp_of_mem_ball x hx
 
@@ -393,18 +393,18 @@ variable (𝕂)
 
 theorem norm_expSeries_div_summable_of_mem_ball (x : 𝔸)
     (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
-    Summable fun n => ‖x ^ n / (n !)‖ := by
+    Summable fun n => ‖x ^ n / ((n)!)‖ := by
   change Summable (norm ∘ _)
   rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
   exact norm_expSeries_summable_of_mem_ball x hx
 
 theorem expSeries_div_summable_of_mem_ball [CompleteSpace 𝔸] (x : 𝔸)
-    (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => x ^ n / n ! :=
+    (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => x ^ n / (n)! :=
   (norm_expSeries_div_summable_of_mem_ball 𝕂 x hx).of_norm
 
 theorem expSeries_div_hasSum_exp_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸)
     (hx : x ∈ EMetric.ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
-    HasSum (fun n => x ^ n / n !) (exp x) := by
+    HasSum (fun n => x ^ n / (n)!) (exp x) := by
   rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
   exact expSeries_hasSum_exp_of_mem_ball x hx
 
@@ -457,7 +457,7 @@ variable {𝕂 𝔸}
 theorem norm_expSeries_summable (x : 𝔸) : Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖ :=
   norm_expSeries_summable_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
 
-theorem norm_expSeries_summable' (x : 𝔸) : Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖ :=
+theorem norm_expSeries_summable' (x : 𝔸) : Summable fun n => ‖((n)!⁻¹ : 𝕂) • x ^ n‖ :=
   norm_expSeries_summable_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
 
 theorem algebraMap_exp_comm [CompleteSpace 𝕂] (x : 𝕂) :
@@ -469,13 +469,13 @@ variable [CompleteSpace 𝔸]
 theorem expSeries_summable (x : 𝔸) : Summable fun n => expSeries 𝕂 𝔸 n fun _ => x :=
   (norm_expSeries_summable x).of_norm
 
-theorem expSeries_summable' (x : 𝔸) : Summable fun n => (n !⁻¹ : 𝕂) • x ^ n :=
+theorem expSeries_summable' (x : 𝔸) : Summable fun n => ((n)!⁻¹ : 𝕂) • x ^ n :=
   (norm_expSeries_summable' x).of_norm
 
 theorem expSeries_hasSum_exp (x : 𝔸) : HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x) (exp x) :=
   expSeries_hasSum_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
 
-theorem exp_series_hasSum_exp' (x : 𝔸) : HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x) :=
+theorem exp_series_hasSum_exp' (x : 𝔸) : HasSum (fun n => ((n)!⁻¹ : 𝕂) • x ^ n) (exp x) :=
   expSeries_hasSum_exp_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
 
 theorem exp_hasFPowerSeriesOnBall : HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞ :=
@@ -603,16 +603,16 @@ section DivisionAlgebra
 
 variable {𝔸 : Type*} [NormedDivisionRing 𝔸] [NormedAlgebra ℚ 𝔸]
 
-theorem norm_expSeries_div_summable (x : 𝔸) : Summable fun n => ‖(x ^ n / n ! : 𝔸)‖ :=
+theorem norm_expSeries_div_summable (x : 𝔸) : Summable fun n => ‖(x ^ n / (n)! : 𝔸)‖ :=
   norm_expSeries_div_summable_of_mem_ball ℚ x
     ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
 
 variable [CompleteSpace 𝔸]
 
-theorem expSeries_div_summable (x : 𝔸) : Summable fun n => x ^ n / n ! :=
+theorem expSeries_div_summable (x : 𝔸) : Summable fun n => x ^ n / (n)! :=
   (norm_expSeries_div_summable x).of_norm
 
-theorem expSeries_div_hasSum_exp (x : 𝔸) : HasSum (fun n => x ^ n / n !) (exp x) :=
+theorem expSeries_div_hasSum_exp (x : 𝔸) : HasSum (fun n => x ^ n / (n)!) (exp x) :=
   expSeries_div_hasSum_exp_of_mem_ball ℚ x ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
 
 theorem exp_neg (x : 𝔸) : exp (-x) = (exp x)⁻¹ :=

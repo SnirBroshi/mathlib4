@@ -64,33 +64,33 @@ noncomputable def preHilbertPoly (d k : ℕ) : F[X] :=
 
 lemma natDegree_preHilbertPoly [CharZero F] (d k : ℕ) :
     (preHilbertPoly F d k).natDegree = d := by
-  have hne : (d ! : F) ≠ 0 := by norm_cast; positivity
+  have hne : ((d)! : F) ≠ 0 := by norm_cast; positivity
   rw [preHilbertPoly, natDegree_smul _ (inv_ne_zero hne), natDegree_comp, ascPochhammer_natDegree,
     add_comm_sub, ← C_1, ← map_sub, natDegree_add_C, natDegree_X, mul_one]
 
 lemma coeff_preHilbertPoly_self [CharZero F] (d k : ℕ) :
-    (preHilbertPoly F d k).coeff d = (d ! : F)⁻¹ := by
+    (preHilbertPoly F d k).coeff d = ((d)! : F)⁻¹ := by
   delta preHilbertPoly
-  have hne : (d ! : F) ≠ 0 := by norm_cast; positivity
+  have hne : ((d)! : F) ≠ 0 := by norm_cast; positivity
   have heq : d = ((ascPochhammer F d).comp (X - C (k : F) + 1)).natDegree :=
     (natDegree_preHilbertPoly F d k).symm.trans (natDegree_smul _ (inv_ne_zero hne))
   nth_rw 3 [heq]
   calc
-  _ = (d ! : F)⁻¹ • ((ascPochhammer F d).comp (X - C ((k : F) - 1))).leadingCoeff := by
+  _ = ((d)! : F)⁻¹ • ((ascPochhammer F d).comp (X - C ((k : F) - 1))).leadingCoeff := by
     simp only [sub_add, ← C_1, ← map_sub, coeff_smul, coeff_natDegree]
-  _ = (d ! : F)⁻¹ := by
+  _ = ((d)! : F)⁻¹ := by
     simp only [leadingCoeff_comp (ne_of_eq_of_ne (natDegree_X_sub_C _) one_ne_zero), Monic.def.1
       (monic_ascPochhammer _ _), leadingCoeff_X_sub_C, one_pow, smul_eq_mul, mul_one]
 
 lemma leadingCoeff_preHilbertPoly [CharZero F] (d k : ℕ) :
-    (preHilbertPoly F d k).leadingCoeff = (d ! : F)⁻¹ := by
+    (preHilbertPoly F d k).leadingCoeff = ((d)! : F)⁻¹ := by
   rw [leadingCoeff, natDegree_preHilbertPoly, coeff_preHilbertPoly_self]
 
 lemma preHilbertPoly_eq_choose_sub_add [CharZero F] (d : ℕ) {k n : ℕ} (hkn : k ≤ n) :
     (preHilbertPoly F d k).eval (n : F) = (n - k + d).choose d := by
-  have : (d ! : F) ≠ 0 := by norm_cast; positivity
+  have : ((d)! : F) ≠ 0 := by norm_cast; positivity
   calc
-  _ = (↑d !)⁻¹ * eval (↑(n - k + 1)) (ascPochhammer F d) := by simp [cast_sub hkn, preHilbertPoly]
+  _ = (↑(d)!)⁻¹ * eval (↑(n - k + 1)) (ascPochhammer F d) := by simp [cast_sub hkn, preHilbertPoly]
   _ = (n - k + d).choose d := by
     rw [ascPochhammer_nat_eq_natCast_ascFactorial];
     simp [field, ascFactorial_eq_factorial_mul_choose]

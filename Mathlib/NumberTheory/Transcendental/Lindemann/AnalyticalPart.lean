@@ -192,8 +192,8 @@ theorem exp_polynomial_approx (f : ℤ[X]) (hf : f.eval 0 ≠ 0) :
     ← norm_mul, this, Nat.mul_factorial_pred prime_p.ne_zero, mul_sub, ← h]
   have :
       ↑(eval 0 f) ^ p * cexp r * ↑(p - 1)! +
-        (↑p ! * (↑(eval 0 gp') * cexp r) - (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p))) =
-      ((p - 1)! • ↑(eval 0 (f ^ p)) + p ! • ↑(eval 0 gp') : ℤ) * cexp r -
+        (↑(p)! * (↑(eval 0 gp') * cexp r) - (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p))) =
+      ((p - 1)! • ↑(eval 0 (f ^ p)) + (p)! • ↑(eval 0 gp') : ℤ) * cexp r -
         (aeval r) (sumIDeriv (X ^ (p - 1) * f ^ p)) := by
     simp; ring
   rw [this, ← h', mul_comm, ← eq_intCast (algebraMap ℤ ℂ),

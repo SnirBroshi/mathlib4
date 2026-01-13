@@ -28,12 +28,12 @@ namespace Nat
 section DivisionSemiring
 variable [DivisionSemiring K] [CharZero K]
 
-theorem cast_choose {a b : ℕ} (h : a ≤ b) : (b.choose a : K) = b ! / (a ! * (b - a)!) := by
-  have : ∀ {n : ℕ}, (n ! : K) ≠ 0 := Nat.cast_ne_zero.2 (factorial_pos _).ne'
+theorem cast_choose {a b : ℕ} (h : a ≤ b) : (b.choose a : K) = (b)! / ((a)! * (b - a)!) := by
+  have : ∀ {n : ℕ}, ((n)! : K) ≠ 0 := Nat.cast_ne_zero.2 (factorial_pos _).ne'
   rw [eq_div_iff_mul_eq (mul_ne_zero this this)]
   rw_mod_cast [← mul_assoc, choose_mul_factorial_mul_factorial h]
 
-theorem cast_add_choose {a b : ℕ} : ((a + b).choose a : K) = (a + b)! / (a ! * b !) := by
+theorem cast_add_choose {a b : ℕ} : ((a + b).choose a : K) = (a + b)! / ((a)! * (b)!) := by
   rw [cast_choose K (le_add_right _ _), Nat.add_sub_cancel_left]
 
 end DivisionSemiring

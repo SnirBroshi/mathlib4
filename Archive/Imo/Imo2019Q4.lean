@@ -35,9 +35,9 @@ open Finset
 namespace Imo2019Q4
 
 theorem upper_bound {k n : ℕ} (hk : k > 0)
-    (h : (k ! : ℤ) = ∏ i ∈ range n, ((2 : ℤ) ^ n - (2 : ℤ) ^ i)) : n < 6 := by
+    (h : ((k)! : ℤ) = ∏ i ∈ range n, ((2 : ℤ) ^ n - (2 : ℤ) ^ i)) : n < 6 := by
   have h2 : ∑ i ∈ range n, i < k := by
-    suffices emultiplicity 2 (k ! : ℤ) = ↑(∑ i ∈ range n, i : ℕ) by
+    suffices emultiplicity 2 ((k)! : ℤ) = ↑(∑ i ∈ range n, i : ℕ) by
       rw [← Nat.cast_lt (α := ℕ∞), ← this]; change emultiplicity ((2 : ℕ) : ℤ) _ < _
       simp_rw [Int.natCast_emultiplicity, emultiplicity_two_factorial_lt hk.lt.ne.symm]
     rw [h, Finset.emultiplicity_prod Int.prime_two, Nat.cast_sum]
@@ -48,7 +48,7 @@ theorem upper_bound {k n : ℕ} (hk : k > 0)
   rw [← not_le]; intro hn
   apply _root_.ne_of_gt _ h
   calc ∏ i ∈ range n, ((2 : ℤ) ^ n - (2 : ℤ) ^ i) ≤ ∏ __ ∈ range n, (2 : ℤ) ^ n := ?_
-    _ < k ! := ?_
+    _ < (k)! := ?_
   · gcongr
     · intro i hi
       simp only [mem_range] at hi
@@ -59,7 +59,7 @@ theorem upper_bound {k n : ℕ} (hk : k > 0)
   norm_cast
   calc ∏ __ ∈ range n, 2 ^ n = 2 ^ (n * n) := by rw [prod_const, card_range, ← pow_mul]
     _ < (∑ i ∈ range n, i)! := ?_
-    _ ≤ k ! := by gcongr
+    _ ≤ (k)! := by gcongr
   clear h h2
   induction n, hn using Nat.le_induction with
   | base => decide
@@ -71,9 +71,9 @@ theorem upper_bound {k n : ℕ} (hk : k > 0)
     calc 2 ^ ((n' + 1) * (n' + 1))
         ≤ 2 ^ (n' * n' + 4 * n') := by gcongr <;> linarith
       _ = 2 ^ (n' * n') * (2 ^ 4) ^ n' := by rw [← pow_mul, ← pow_add]
-      _ < A ! * (2 ^ 4) ^ n' := by gcongr
-      _ = A ! * (15 + 1) ^ n' := rfl
-      _ ≤ A ! * (A + 1) ^ n' := by gcongr; exact le_sum
+      _ < (A)! * (2 ^ 4) ^ n' := by gcongr
+      _ = (A)! * (15 + 1) ^ n' := rfl
+      _ ≤ (A)! * (A + 1) ^ n' := by gcongr; exact le_sum
       _ ≤ (A + n')! := factorial_mul_pow_le_factorial
       _ = (∑ i ∈ range (n' + 1), i)! := by rw [sum_range_succ]
 
@@ -81,7 +81,8 @@ end Imo2019Q4
 
 set_option linter.flexible false in
 theorem imo2019_q4 {k n : ℕ} (hk : k > 0) (hn : n > 0) :
-    (k ! : ℤ) = ∏ i ∈ range n, ((2 : ℤ) ^ n - (2 : ℤ) ^ i) ↔ (k, n) = (1, 1) ∨ (k, n) = (3, 2) := by
+    ((k)! : ℤ) = ∏ i ∈ range n, ((2 : ℤ) ^ n - (2 : ℤ) ^ i) ↔
+      (k, n) = (1, 1) ∨ (k, n) = (3, 2) := by
   -- The implication `←` holds.
   constructor
   swap

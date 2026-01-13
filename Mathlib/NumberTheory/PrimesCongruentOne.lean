@@ -30,7 +30,7 @@ theorem exists_prime_gt_modEq_one {k : ℕ} (n : ℕ) (hk0 : k ≠ 0) :
   rcases (one_le_iff_ne_zero.2 hk0).eq_or_lt with (rfl | hk1)
   · rcases exists_infinite_primes (n + 1) with ⟨p, hnp, hp⟩
     exact ⟨p, hp, hnp, modEq_one⟩
-  let b := k * (n !)
+  let b := k * ((n)!)
   have hgt : 1 < (eval (↑b) (cyclotomic k ℤ)).natAbs := by
     rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
     have hb : 2 ≤ b := le_mul_of_le_of_one_le hk1 n.factorial_pos

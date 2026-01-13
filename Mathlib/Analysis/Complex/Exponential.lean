@@ -241,9 +241,9 @@ theorem exp_sub : exp (x - y) = exp x / exp y := by
 
 open IsAbsoluteValue Nat
 
-theorem sum_le_exp_of_nonneg {x : ℝ} (hx : 0 ≤ x) (n : ℕ) : ∑ i ∈ range n, x ^ i / i ! ≤ exp x :=
+theorem sum_le_exp_of_nonneg {x : ℝ} (hx : 0 ≤ x) (n : ℕ) : ∑ i ∈ range n, x ^ i / (i)! ≤ exp x :=
   calc
-    ∑ i ∈ range n, x ^ i / i ! ≤ lim (⟨_, isCauSeq_re (exp' x)⟩ : CauSeq ℝ abs) := by
+    ∑ i ∈ range n, x ^ i / (i)! ≤ lim (⟨_, isCauSeq_re (exp' x)⟩ : CauSeq ℝ abs) := by
       refine le_lim (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
       simp only [exp', const_apply, re_sum]
       norm_cast
@@ -251,15 +251,15 @@ theorem sum_le_exp_of_nonneg {x : ℝ} (hx : 0 ≤ x) (n : ℕ) : ∑ i ∈ rang
       positivity
     _ = exp x := by rw [exp, Complex.exp, ← cauSeqRe, lim_re]
 
-lemma pow_div_factorial_le_exp (hx : 0 ≤ x) (n : ℕ) : x ^ n / n ! ≤ exp x :=
+lemma pow_div_factorial_le_exp (hx : 0 ≤ x) (n : ℕ) : x ^ n / (n)! ≤ exp x :=
   calc
-    x ^ n / n ! ≤ ∑ k ∈ range (n + 1), x ^ k / k ! :=
-        single_le_sum (f := fun k ↦ x ^ k / k !) (fun k _ ↦ by positivity) (self_mem_range_succ n)
+    x ^ n / (n)! ≤ ∑ k ∈ range (n + 1), x ^ k / (k)! :=
+        single_le_sum (f := fun k ↦ x ^ k / (k)!) (fun k _ ↦ by positivity) (self_mem_range_succ n)
     _ ≤ exp x := sum_le_exp_of_nonneg hx _
 
 theorem quadratic_le_exp_of_nonneg {x : ℝ} (hx : 0 ≤ x) : 1 + x + x ^ 2 / 2 ≤ exp x :=
   calc
-    1 + x + x ^ 2 / 2 = ∑ i ∈ range 3, x ^ i / i ! := by
+    1 + x + x ^ 2 / 2 = ∑ i ∈ range 3, x ^ i / (i)! := by
         simp only [sum_range_succ, range_one, sum_singleton, _root_.pow_zero, factorial,
           pow_one, mul_one, Nat.mul_one,
           cast_succ]

@@ -74,17 +74,17 @@ theorem continuousOn_exp {s : Set ℂ} : ContinuousOn exp s :=
   continuous_exp.continuousOn
 
 lemma exp_sub_sum_range_isBigO_pow (n : ℕ) :
-    (fun x ↦ exp x - ∑ i ∈ Finset.range n, x ^ i / i !) =O[𝓝 0] (· ^ n) := by
+    (fun x ↦ exp x - ∑ i ∈ Finset.range n, x ^ i / (i)!) =O[𝓝 0] (· ^ n) := by
   rcases (zero_le n).eq_or_lt with rfl | hn
   · simpa using continuous_exp.continuousAt.norm.isBoundedUnder_le
-  · refine .of_bound (n.succ / (n ! * n)) ?_
+  · refine .of_bound (n.succ / ((n)! * n)) ?_
     rw [NormedAddCommGroup.nhds_zero_basis_norm_lt.eventually_iff]
     refine ⟨1, one_pos, fun x hx ↦ ?_⟩
     convert exp_bound hx.out.le hn using 1
     simp [field]
 
 lemma exp_sub_sum_range_succ_isLittleO_pow (n : ℕ) :
-    (fun x ↦ exp x - ∑ i ∈ Finset.range (n + 1), x ^ i / i !) =o[𝓝 0] (· ^ n) :=
+    (fun x ↦ exp x - ∑ i ∈ Finset.range (n + 1), x ^ i / (i)!) =o[𝓝 0] (· ^ n) :=
   (exp_sub_sum_range_isBigO_pow (n + 1)).trans_isLittleO <| isLittleO_pow_pow n.lt_succ_self
 
 end Complex
@@ -154,14 +154,14 @@ theorem continuous_exp : Continuous exp := by
 theorem continuousOn_exp {s : Set ℝ} : ContinuousOn exp s := by fun_prop
 
 lemma exp_sub_sum_range_isBigO_pow (n : ℕ) :
-    (fun x ↦ exp x - ∑ i ∈ Finset.range n, x ^ i / i !) =O[𝓝 0] (· ^ n) := by
+    (fun x ↦ exp x - ∑ i ∈ Finset.range n, x ^ i / (i)!) =O[𝓝 0] (· ^ n) := by
   have := (Complex.exp_sub_sum_range_isBigO_pow n).comp_tendsto
     (Complex.continuous_ofReal.tendsto' 0 0 rfl)
   simp only [Function.comp_def] at this
   norm_cast at this
 
 lemma exp_sub_sum_range_succ_isLittleO_pow (n : ℕ) :
-    (fun x ↦ exp x - ∑ i ∈ Finset.range (n + 1), x ^ i / i !) =o[𝓝 0] (· ^ n) :=
+    (fun x ↦ exp x - ∑ i ∈ Finset.range (n + 1), x ^ i / (i)!) =o[𝓝 0] (· ^ n) :=
   (exp_sub_sum_range_isBigO_pow (n + 1)).trans_isLittleO <| isLittleO_pow_pow n.lt_succ_self
 
 end Real

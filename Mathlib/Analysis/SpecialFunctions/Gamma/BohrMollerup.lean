@@ -142,7 +142,7 @@ namespace BohrMollerup
 /-- The function `n ↦ x log n + log n! - (log x + ... + log (x + n))`, which we will show tends to
 `log (Gamma x)` as `n → ∞`. -/
 def logGammaSeq (x : ℝ) (n : ℕ) : ℝ :=
-  x * log n + log n ! - ∑ m ∈ Finset.range (n + 1), log (x + m)
+  x * log n + log (n)! - ∑ m ∈ Finset.range (n + 1), log (x + m)
 
 variable {f : ℝ → ℝ} {x : ℝ} {n : ℕ}
 

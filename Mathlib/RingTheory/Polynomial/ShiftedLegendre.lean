@@ -43,7 +43,7 @@ noncomputable def shiftedLegendre (n : ℕ) : ℤ[X] :=
 /-- The shifted Legendre polynomial multiplied by a factorial equals the higher-order derivative of
 the combinatorial function `X ^ n * (1 - X) ^ n`. This is the analogue of Rodrigues' formula for
 the shifted Legendre polynomials. -/
-theorem factorial_mul_shiftedLegendre_eq (n : ℕ) : (n ! : ℤ[X]) * (shiftedLegendre n) =
+theorem factorial_mul_shiftedLegendre_eq (n : ℕ) : ((n)! : ℤ[X]) * (shiftedLegendre n) =
     derivative^[n] (X ^ n * (1 - (X : ℤ[X])) ^ n) := by
   symm
   calc
@@ -57,7 +57,7 @@ theorem factorial_mul_shiftedLegendre_eq (n : ℕ) : (n ! : ℤ[X]) * (shiftedLe
       ← pow_add, ← mul_assoc, nsmul_eq_mul, add_comm]
     rw [Finset.mem_range] at hm
     linarith
-  _ = ∑ x ∈ range (n + 1), ↑((n + x)! / x !) * C (↑(n.choose x) * (-1) ^ x) * X ^ x := by
+  _ = ∑ x ∈ range (n + 1), ↑((n + x)! / (x)!) * C (↑(n.choose x) * (-1) ^ x) * X ^ x := by
     rw [iterate_derivative_sum]
     congr! 1 with x _
     rw [show (n.choose x • (-1) ^ x : ℤ[X]) = C (n.choose x • (-1) ^ x) by simp,
@@ -66,10 +66,10 @@ theorem factorial_mul_shiftedLegendre_eq (n : ℕ) : (n ! : ℤ[X]) * (shiftedLe
     simp only [Int.reduceNeg, nsmul_eq_mul, eq_intCast, Int.cast_mul, Int.cast_natCast,
       Int.cast_pow, Int.cast_neg, Int.cast_one, zsmul_eq_mul]
     ring
-  _ = ∑ i ∈ range (n + 1), ↑n ! * C ((-1) ^ i * ↑(n.choose i) * ↑((n + i).choose n)) * X ^ i := by
+  _ = ∑ i ∈ range (n + 1), ↑(n)! * C ((-1) ^ i * ↑(n.choose i) * ↑((n + i).choose n)) * X ^ i := by
     congr! 2 with x _
-    rw [C_mul (b := ((n + x).choose n : ℤ)), mul_comm, mul_comm (n ! : ℤ[X]), mul_comm _ ((-1) ^ x),
-      mul_assoc]
+    rw [C_mul (b := ((n + x).choose n : ℤ)), mul_comm, mul_comm ((n)! : ℤ[X]),
+      mul_comm _ ((-1) ^ x), mul_assoc]
     congr 1
     rw [add_comm, add_choose]
     simp only [Int.natCast_ediv, cast_mul, eq_intCast]
@@ -77,7 +77,7 @@ theorem factorial_mul_shiftedLegendre_eq (n : ℕ) : (n ! : ℤ[X]) * (shiftedLe
     rw [mul_comm, ← Nat.mul_div_assoc]
     · rw [mul_comm, Nat.mul_div_mul_right _ _ (by positivity)]
     · simp only [factorial_mul_factorial_dvd_factorial_add]
-  _ = (n ! : ℤ[X]) * (shiftedLegendre n) := by simp [← mul_assoc, shiftedLegendre, mul_sum]
+  _ = ((n)! : ℤ[X]) * (shiftedLegendre n) := by simp [← mul_assoc, shiftedLegendre, mul_sum]
 
 /-- The coefficient of the shifted Legendre polynomial at `k` is
 `(-1) ^ k * (n.choose k) * (n + k).choose n`. -/
@@ -102,7 +102,7 @@ theorem coeff_shiftedLegendre (n k : ℕ) :
 theorem neg_one_pow_mul_shiftedLegendre_comp_one_sub_X_eq (n : ℕ) :
     (-1) ^ n * (shiftedLegendre n).comp (1 - X) = shiftedLegendre n := by
   refine nat_mul_inj' ?_ (factorial_ne_zero n)
-  rw [← mul_assoc, mul_comm (n ! : ℤ[X]), mul_assoc, ← natCast_mul_comp,
+  rw [← mul_assoc, mul_comm ((n)! : ℤ[X]), mul_assoc, ← natCast_mul_comp,
     factorial_mul_shiftedLegendre_eq, ← iterate_derivative_comp_one_sub_X]
   simp [mul_comm]
 

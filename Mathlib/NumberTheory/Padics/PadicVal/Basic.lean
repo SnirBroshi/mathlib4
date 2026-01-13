@@ -555,7 +555,7 @@ theorem range_pow_padicValNat_subset_divisors' {n : ℕ} [hp : Fact p.Prime] :
 
 /-- The `p`-adic valuation of `(p * n)!` is `n` more than that of `n!`. -/
 theorem padicValNat_factorial_mul (n : ℕ) [hp : Fact p.Prime] :
-    padicValNat p (p * n)! = padicValNat p n ! + n := by
+    padicValNat p (p * n)! = padicValNat p (n)! + n := by
   apply Nat.cast_injective (R := ℕ∞)
   rw [padicValNat_eq_emultiplicity <| factorial_ne_zero (p * n), Nat.cast_add,
       padicValNat_eq_emultiplicity <| factorial_ne_zero n]
@@ -582,7 +582,7 @@ theorem padicValNat_factorial_mul_add {n : ℕ} (m : ℕ) [hp : Fact p.Prime] (h
 /-- The `p`-adic valuation of `n!` is equal to the `p`-adic valuation of the factorial of the
 largest multiple of `p` below `n`, i.e. `(p * ⌊n / p⌋)!`. -/
 @[simp] theorem padicValNat_mul_div_factorial (n : ℕ) [hp : Fact p.Prime] :
-    padicValNat p (p * (n / p))! = padicValNat p n ! := by
+    padicValNat p (p * (n / p))! = padicValNat p (n)! := by
   nth_rw 2 [← div_add_mod n p]
   exact (padicValNat_factorial_mul_add (n / p) <| mod_lt n hp.out.pos).symm
 
@@ -591,7 +591,7 @@ largest multiple of `p` below `n`, i.e. `(p * ⌊n / p⌋)!`. -/
 The `p`-adic valuation of `n!` is the sum of the quotients `n / p ^ i`. This sum is expressed
 over the finset `Ico 1 b` where `b` is any bound greater than `log p n`. -/
 theorem padicValNat_factorial {n b : ℕ} [hp : Fact p.Prime] (hnb : log p n < b) :
-    padicValNat p (n !) = ∑ i ∈ Finset.Ico 1 b, n / p ^ i := by
+    padicValNat p ((n)!) = ∑ i ∈ Finset.Ico 1 b, n / p ^ i := by
   exact_mod_cast ((padicValNat_eq_emultiplicity (p := p) <| factorial_ne_zero _) ▸
       Prime.emultiplicity_factorial hp.out hnb)
 
@@ -600,7 +600,7 @@ theorem padicValNat_factorial {n b : ℕ} [hp : Fact p.Prime] (hnb : log p n < b
 Taking (`p - 1`) times the `p`-adic valuation of `n!` equals `n` minus the sum of base `p` digits
 of `n`. -/
 theorem sub_one_mul_padicValNat_factorial [hp : Fact p.Prime] (n : ℕ) :
-    (p - 1) * padicValNat p (n !) = n - (p.digits n).sum := by
+    (p - 1) * padicValNat p ((n)!) = n - (p.digits n).sum := by
   rw [padicValNat_factorial <| lt_succ_of_lt <| lt_add_one (log p n)]
   nth_rw 2 [← zero_add 1]
   rw [Nat.succ_eq_add_one, ← Finset.sum_Ico_add' _ 0 _ 1,
@@ -619,7 +619,7 @@ theorem sub_one_mul_padicValNat_factorial_lt_of_ne_zero [hp : Fact p.Prime] {n :
 theorem padicValNat_factorial_lt_of_ne_zero [hp : Fact p.Prime] {n : ℕ} (hn : n ≠ 0) :
     padicValNat p n.factorial < n := by
   apply lt_of_le_of_lt _ (sub_one_mul_padicValNat_factorial_lt_of_ne_zero p hn)
-  conv_lhs => rw [← one_mul (padicValNat p n !)]
+  conv_lhs => rw [← one_mul (padicValNat p (n)!)]
   gcongr
   exact le_sub_one_of_lt (Nat.Prime.one_lt hp.elim)
 

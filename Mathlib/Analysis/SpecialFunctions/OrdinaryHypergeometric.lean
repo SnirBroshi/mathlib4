@@ -62,7 +62,7 @@ variable {𝕂 : Type*} (𝔸 : Type*) [Field 𝕂] [Ring 𝔸] [Algebra 𝕂 �
   [IsTopologicalRing 𝔸]
 
 /-- The coefficients in the ordinary hypergeometric sum. -/
-noncomputable abbrev ordinaryHypergeometricCoefficient (a b c : 𝕂) (n : ℕ) := ((n !⁻¹ : 𝕂) *
+noncomputable abbrev ordinaryHypergeometricCoefficient (a b c : 𝕂) (n : ℕ) := (((n)!⁻¹ : 𝕂) *
     (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b * ((ascPochhammer 𝕂 n).eval c)⁻¹)
 
 /-- `ordinaryHypergeometricSeries 𝔸 (a b c : 𝕂)` is a `FormalMultilinearSeries`.
@@ -85,24 +85,24 @@ notation "₂F₁" => ordinaryHypergeometric
 
 theorem ordinaryHypergeometricSeries_apply_eq (x : 𝔸) (n : ℕ) :
     (ordinaryHypergeometricSeries 𝔸 a b c n fun _ => x) =
-      ((n !⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
+      (((n)!⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
         ((ascPochhammer 𝕂 n).eval c)⁻¹) • x ^ n := by
   rw [ordinaryHypergeometricSeries, ofScalars_apply_eq]
 
 /-- This naming follows the convention of `NormedSpace.expSeries_apply_eq'`. -/
 theorem ordinaryHypergeometricSeries_apply_eq' (x : 𝔸) :
     (fun n => ordinaryHypergeometricSeries 𝔸 a b c n fun _ => x) =
-      fun n => ((n !⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
+      fun n => (((n)!⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
         ((ascPochhammer 𝕂 n).eval c)⁻¹) • x ^ n := by
   rw [ordinaryHypergeometricSeries, ofScalars_apply_eq']
 
 theorem ordinaryHypergeometric_sum_eq (x : 𝔸) : (ordinaryHypergeometricSeries 𝔸 a b c).sum x =
-    ∑' n : ℕ, ((n !⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
+    ∑' n : ℕ, (((n)!⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a * (ascPochhammer 𝕂 n).eval b *
       ((ascPochhammer 𝕂 n).eval c)⁻¹) • x ^ n :=
   tsum_congr fun n => ordinaryHypergeometricSeries_apply_eq a b c x n
 
 theorem ordinaryHypergeometric_eq_tsum : ₂F₁ a b c =
-    fun (x : 𝔸) => ∑' n : ℕ, ((n !⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a *
+    fun (x : 𝔸) => ∑' n : ℕ, (((n)!⁻¹ : 𝕂) * (ascPochhammer 𝕂 n).eval a *
       (ascPochhammer 𝕂 n).eval b * ((ascPochhammer 𝕂 n).eval c)⁻¹) • x ^ n :=
   funext (ordinaryHypergeometric_sum_eq a b c)
 
@@ -181,7 +181,7 @@ theorem ordinaryHypergeometricSeries_norm_div_succ_norm (n : ℕ)
     _ = ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖⁻¹ *
         ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖⁻¹ *
         ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹⁻¹ * ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹ *
-        ‖(n ! : 𝕂)‖⁻¹⁻¹ * ‖(n ! : 𝕂)‖⁻¹ * ‖a + n‖⁻¹ * ‖b + n‖⁻¹ * ‖c + n‖⁻¹⁻¹ *
+        ‖((n)! : 𝕂)‖⁻¹⁻¹ * ‖((n)! : 𝕂)‖⁻¹ * ‖a + n‖⁻¹ * ‖b + n‖⁻¹ * ‖c + n‖⁻¹⁻¹ *
         ‖1 + (n : 𝕂)‖⁻¹⁻¹ := by ring_nf
     _ = _ := by
       simp only [inv_inv]

@@ -94,7 +94,7 @@ theorem main₀ (n : ℕ) : ∑ k ∈ range (n + 1), k * p (Fin n) k = n * (n - 
   simpa using main_fintype (Fin n)
 
 /-- Main statement for permutations of `Fin n`. -/
-theorem main {n : ℕ} (hn : 1 ≤ n) : ∑ k ∈ range (n + 1), k * p (Fin n) k = n ! := by
+theorem main {n : ℕ} (hn : 1 ≤ n) : ∑ k ∈ range (n + 1), k * p (Fin n) k = (n)! := by
   rw [main₀, Nat.mul_factorial_pred (Nat.one_le_iff_ne_zero.mp hn)]
 
 end Imo1987Q1

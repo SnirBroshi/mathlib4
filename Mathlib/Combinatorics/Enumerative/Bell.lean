@@ -57,25 +57,25 @@ def bell (m : Multiset ℕ) : ℕ :=
 theorem bell_zero : bell 0 = 1 := rfl
 
 private theorem bell_mul_eq_lemma {x : ℕ} (hx : x ≠ 0) :
-    ∀ c, x ! ^ c * c ! * ∏ j ∈ Finset.range c, (j * x + x - 1).choose (x - 1) = (x * c)!
+    ∀ c, (x)! ^ c * (c)! * ∏ j ∈ Finset.range c, (j * x + x - 1).choose (x - 1) = (x * c)!
   | 0 => by simp
   | c + 1 => calc
-      x ! ^ (c + 1) * (c + 1)! * ∏ j ∈ Finset.range (c + 1), (j * x + x - 1).choose (x - 1)
-        = x ! * (c + 1) * x ! ^ c * c ! *
+      (x)! ^ (c + 1) * (c + 1)! * ∏ j ∈ Finset.range (c + 1), (j * x + x - 1).choose (x - 1)
+        = (x)! * (c + 1) * (x)! ^ c * (c)! *
             ∏ j ∈ Finset.range (c + 1), (j * x + x - 1).choose (x - 1) := by
         rw [factorial_succ, pow_succ]; ring
-      _ = (x ! ^ c * c ! * ∏ j ∈ Finset.range c, (j * x + x - 1).choose (x - 1)) *
-            (c * x + x - 1).choose (x - 1) * x ! * (c + 1) := by
+      _ = ((x)! ^ c * (c)! * ∏ j ∈ Finset.range c, (j * x + x - 1).choose (x - 1)) *
+            (c * x + x - 1).choose (x - 1) * (x)! * (c + 1) := by
         rw [Finset.prod_range_succ]; ring
-      _ = (c + 1) * (c * x + x - 1).choose (x - 1) * (x * c)! * x ! := by
+      _ = (c + 1) * (c * x + x - 1).choose (x - 1) * (x * c)! * (x)! := by
         rw [bell_mul_eq_lemma hx]; ring
       _ = (x * (c + 1))! := by
         rw [← Nat.choose_mul_add hx, mul_comm c x, Nat.add_choose_mul_factorial_mul_factorial]
         ring_nf
 
 theorem bell_mul_eq (m : Multiset ℕ) :
-    m.bell * (m.map (fun j ↦ j !)).prod * ∏ j ∈ (m.toFinset.erase 0), (m.count j)!
-      = m.sum ! := by
+    m.bell * (m.map (fun j ↦ (j)!)).prod * ∏ j ∈ (m.toFinset.erase 0), (m.count j)!
+      = (m.sum)! := by
   unfold bell
   rw [← Nat.mul_right_inj (a := ∏ i ∈ m.toFinset, (i * count i m)!) (by positivity)]
   simp only [← mul_assoc]
@@ -104,7 +104,7 @@ theorem bell_mul_eq (m : Multiset ℕ) :
     simp only [smul_eq_mul, mul_comm]
 
 theorem bell_eq (m : Multiset ℕ) :
-    m.bell = m.sum ! / ((m.map (fun j ↦ j !)).prod *
+    m.bell = (m.sum)! / ((m.map (fun j ↦ (j)!)).prod *
       ∏ j ∈ (m.toFinset.erase 0), (m.count j)!) := by
   rw [← Nat.mul_left_inj, Nat.div_mul_cancel _]
   · rw [← mul_assoc]
@@ -157,7 +157,7 @@ theorem uniformBell_one_right (m : ℕ) : uniformBell m 1 = 1 := by
     tsub_eq_zero_of_le, choose_zero_right, Finset.prod_const_one]
 
 theorem uniformBell_mul_eq (m : ℕ) {n : ℕ} (hn : n ≠ 0) :
-    uniformBell m n * n ! ^ m * m ! = (m * n)! := by
+    uniformBell m n * (n)! ^ m * (m)! = (m * n)! := by
   convert bell_mul_eq (replicate m n)
   · simp only [map_replicate, prod_replicate]
   · simp only [toFinset_replicate]
@@ -169,7 +169,7 @@ theorem uniformBell_mul_eq (m : ℕ) {n : ℕ} (hn : n ≠ 0) :
   · simp
 
 theorem uniformBell_eq_div (m : ℕ) {n : ℕ} (hn : n ≠ 0) :
-    uniformBell m n = (m * n)! / (n ! ^ m * m !) := by
+    uniformBell m n = (m * n)! / ((n)! ^ m * (m)!) := by
   rw [eq_comm]
   apply Nat.div_eq_of_eq_mul_left
   · exact Nat.mul_pos (Nat.pow_pos (Nat.factorial_pos n)) m.factorial_pos

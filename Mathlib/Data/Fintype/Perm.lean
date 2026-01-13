@@ -40,7 +40,7 @@ def permsOfList : List α → List (Perm α)
   | [] => [1]
   | a :: l => permsOfList l ++ l.flatMap fun b => (permsOfList l).map fun f => Equiv.swap a b * f
 
-theorem length_permsOfList : ∀ l : List α, length (permsOfList l) = l.length !
+theorem length_permsOfList : ∀ l : List α, length (permsOfList l) = (l.length)!
   | [] => rfl
   | a :: l => by
     simp [Nat.factorial_succ, permsOfList, length_permsOfList, succ_mul, add_comm]

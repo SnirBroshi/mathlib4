@@ -11,7 +11,7 @@ example :
 example : Nat.divisors 57 = {1, 3, 19, 57} := by
   simp only [Nat.divisors_ofNat]
 
-example : (Nat.divisors <| 6 !).card = 30 := by
+example : (Nat.divisors <| 6!).card = 30 := by
   simp [Nat.divisors_ofNat, Nat.factorial_succ]
 
 example : (Nat.divisors <| primorial 12).card = 32 := by
