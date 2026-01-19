@@ -157,7 +157,6 @@ theorem filter_product_card (s : Finset α) (t : Finset β) (p : α → Prop) (q
   classical
   rw [← card_product, ← card_product, ← filter_product, ← filter_product, ← card_union_of_disjoint]
   · apply congr_arg
-    ext
     grind
   · apply Finset.disjoint_filter_filter'
     exact (disjoint_compl_right.inf_left _).inf_right _
@@ -276,7 +275,7 @@ variable (s)
 @[simp]
 theorem image_diag [DecidableEq β] (f : α × α → β) (s : Finset α) :
     s.diag.image f = s.image fun x ↦ f (x, x) := by
-  aesop
+  grind
 
 @[simp, norm_cast]
 theorem coe_offDiag : (s.offDiag : Set (α × α)) = (s : Set α).offDiag :=
