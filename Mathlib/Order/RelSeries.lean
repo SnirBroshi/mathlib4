@@ -1121,6 +1121,17 @@ lemma finiteDimensionalOrder_or_infiniteDimensionalOrder [Preorder α] [Nonempty
     FiniteDimensionalOrder α ∨ InfiniteDimensionalOrder α :=
   SetRel.finiteDimensional_or_infiniteDimensional _
 
+/-- Every finite nonempty preorder has finite order dimension. -/
+instance (priority := 100) Finite.to_finiteDimensionalOrder [Preorder α] [Finite α] [Nonempty α] :
+    FiniteDimensionalOrder α := by
+  rw [← not_infiniteDimensionalOrder_iff]
+  intro h
+  letI := h
+  letI := Fintype.ofFinite α
+  have hs := LTSeries.length_lt_card (LTSeries.withLength α (Fintype.card α))
+  rw [LTSeries.length_withLength] at hs
+  exact (lt_irrefl _ hs)
+
 /-- If `f : α → β` is a strictly monotonic function and `α` is an infinite dimensional type then so
   is `β`. -/
 lemma infiniteDimensionalOrder_of_strictMono [Preorder α] [Preorder β]
