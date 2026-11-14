@@ -328,7 +328,7 @@ theorem isClosed_iff_eq_empty_or_mem_range_Iic_of_mem [TopologicalSpace α] [IsS
 
 theorem isClosed_iff_eq_empty_or_mem_range_Iic [TopologicalSpace α] [IsScott α univ] (U : Set α) :
     IsClosed U ↔ U = ∅ ∨ U ∈ range Iic :=
-  isClosed_iff_eq_empty_or_mem_range_Iic_of_mem univ <| mem_univ Uᶜ
+  isClosed_iff_eq_empty_or_mem_range_Iic_of_mem univ <| mem_univ U
 
 lemma isOpen_iff_eq_univ_or_mem_range_Ioi_of_mem [TopologicalSpace α] [IsScott α D] {U : Set α}
     (h : Uᶜ ∈ D) : IsOpen U ↔ U = univ ∨ U ∈ range Ioi := by
