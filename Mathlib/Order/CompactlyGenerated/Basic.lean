@@ -95,7 +95,6 @@ theorem IsCompactElement.of_wellFoundedGT [WellFoundedGT α] : IsCompactElement 
   have ⟨m, hm⟩ := ‹WellFoundedGT α›.exists_maximal s hne
   exact ⟨m, hm.prop, hle.trans <| hlub.right <| hdir.maximal_iff_isGreatest.mp hm |>.right⟩
 
-variable (a) in
 @[simp]
 theorem dirSupInacc_Ici_iff : DirSupInacc (Ici a) ↔ IsCompactElement a := by
   rw [← dirSupClosed_compl, DirSupClosed, IsCompactElement]
@@ -106,7 +105,6 @@ theorem dirSupClosed_Iio_iff {α : Type*} [LinearOrder α] (a : α) :
     DirSupClosed (Iio a) ↔ IsCompactElement a := by
   simp [← dirSupInacc_compl]
 
-@[simp]
 theorem IsCompactElement.dirSupClosed_Iio (h : IsCompactElement a) : DirSupClosed (Iio a) := by
   intro s hsub hne hdir u hlub
   have : a ∈ upperBounds s := fun x hmem ↦ hsub hmem |>.le
