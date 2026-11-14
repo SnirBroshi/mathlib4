@@ -130,7 +130,7 @@ theorem girth_eq_iff_egirth_eq {n : ℕ} : G.girth = n ↔ G.egirth = n ∨ n = 
   · simp [girth_eq_toNat_egirth, (three_pos.trans_le <| G.three_le_egirth).ne']
   · simp [girth_eq_toNat_egirth, ENat.toNat_eq_iff, hn]
 
-theorem girth_eq_iff_of_ne_zero {n : ℕ} (hn : n ≠ 0) : G.girth = n ↔ G.egirth = n :=
+theorem girth_eq_iff_egirth_eq_of_ne_zero {n : ℕ} (hn : n ≠ 0) : G.girth = n ↔ G.egirth = n :=
   ENat.toNat_eq_iff hn
 
 theorem girth_eq_iff_of_not_isAcyclic {n : ℕ} (h : ¬G.IsAcyclic) : G.girth = n ↔ G.egirth = n := by
